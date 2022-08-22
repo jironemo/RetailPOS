@@ -13,6 +13,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.border.EtchedBorder;
+import javax.swing.JLayeredPane;
+import javax.swing.JDesktopPane;
+import javax.swing.JScrollPane;
 @SuppressWarnings("serial")
 public class Dashboard extends JFrame {
 
@@ -27,7 +30,6 @@ public class Dashboard extends JFrame {
 	 * Create the frame.
 	 */
 	public Dashboard() {
-		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0,0,1920, 1080);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -69,20 +71,6 @@ public class Dashboard extends JFrame {
 		btn_Stock.setBorder(new EmptyBorder(0, 0, 0, 0));
 		btn_Stock.setBounds(245, 225, 387, 289);
 		contentPane.add(btn_Stock);
-		
-		JButton btnNewButton = new JButton("X");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				getDashboard().dispose();
-				
-			}
-		});
-		btnNewButton.setBackground(new Color(255, 0, 0));
-		btnNewButton.setForeground(new Color(255, 255, 255));
-		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 44));
-		btnNewButton.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
-		btnNewButton.setBounds(1860, 0, 60, 60);
-		contentPane.add(btnNewButton);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(255, 204, 0));

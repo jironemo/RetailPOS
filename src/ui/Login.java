@@ -63,9 +63,10 @@ public class Login extends LoginController {
 		frmLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmLogin.getContentPane().setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Login");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 66));
-		lblNewLabel.setBounds(281, 34, 190, 80);
+		JLabel lblNewLabel = new JLabel("WELCOME!");
+		lblNewLabel.setForeground(Color.ORANGE);
+		lblNewLabel.setFont(new Font("Arial Black", Font.PLAIN, 60));
+		lblNewLabel.setBounds(188, 23, 368, 80);
 		frmLogin.getContentPane().add(lblNewLabel);
 		txtUser = new JTextField();
 		txtUser.setFont(new Font("Tahoma", Font.PLAIN, 15));
