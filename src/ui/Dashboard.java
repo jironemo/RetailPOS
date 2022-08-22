@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
+import javax.swing.border.EtchedBorder;
 @SuppressWarnings("serial")
 public class Dashboard extends JFrame {
 
@@ -38,7 +39,7 @@ public class Dashboard extends JFrame {
 		
 		JButton btn_AddSale = new JButton("ADD SALE");
 		btn_AddSale.setForeground(Color.WHITE);
-		btn_AddSale.setBackground(new Color(0, 139, 139));
+		btn_AddSale.setBackground(new Color(255, 204, 0));
 		btn_AddSale.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				WindowBridge.switchWindowsTemp(getDashboard(), new AddSale(getDashboard()));
@@ -52,9 +53,9 @@ public class Dashboard extends JFrame {
 		contentPane.add(btn_AddSale);
 		
 		JButton btn_Stock = new JButton("VIEW STOCKS");
-		btn_Stock.setIcon(new ImageIcon(Dashboard.class.getResource("/resources/search.png")));
+		btn_Stock.setIcon(null);
 		btn_Stock.setForeground(Color.WHITE);
-		btn_Stock.setBackground(new Color(0, 139, 139));
+		btn_Stock.setBackground(new Color(255, 204, 0));
 		btn_Stock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				WindowBridge.switchWindowsTemp(getDashboard(), new Stocks(getDashboard()));
@@ -69,12 +70,6 @@ public class Dashboard extends JFrame {
 		btn_Stock.setBounds(245, 225, 387, 289);
 		contentPane.add(btn_Stock);
 		
-		JLabel lblDashboard = new JLabel("Dashboard");
-		lblDashboard.setIcon(new ImageIcon(Dashboard.class.getResource("/resources/dashboard.png")));
-		lblDashboard.setFont(new Font("Tahoma", Font.PLAIN, 50));
-		lblDashboard.setBounds(436, 52, 396, 80);
-		contentPane.add(lblDashboard);
-		
 		JButton btnNewButton = new JButton("X");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -85,9 +80,40 @@ public class Dashboard extends JFrame {
 		btnNewButton.setBackground(new Color(255, 0, 0));
 		btnNewButton.setForeground(new Color(255, 255, 255));
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 44));
-		btnNewButton.setBorder(null);
+		btnNewButton.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
 		btnNewButton.setBounds(1860, 0, 60, 60);
 		contentPane.add(btnNewButton);
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(255, 204, 0));
+		panel.setBounds(0, 0, 1920, 60);
+		contentPane.add(panel);
+		panel.setLayout(null);
+		
+		JLabel lblDashboard = new JLabel("DASHBOARD");
+		lblDashboard.setIconTextGap(2);
+		lblDashboard.setAlignmentY(0.0f);
+		lblDashboard.setForeground(new Color(255, 255, 255));
+		lblDashboard.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDashboard.setBounds(0, 0, 400, 60);
+		panel.add(lblDashboard);
+		lblDashboard.setIcon(new ImageIcon(Dashboard.class.getResource("/resources/dashboard.png")));
+		lblDashboard.setFont(new Font("Roboto Black", Font.PLAIN, 50));
+		
+		JButton btn_ViewSales = new JButton("VIEW SALES");
+		btn_ViewSales.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				WindowBridge.switchWindowsTemp(getDashboard(), new ViewSales(getDashboard()));
+			}
+		});
+		btn_ViewSales.setHorizontalTextPosition(SwingConstants.CENTER);
+		btn_ViewSales.setForeground(Color.WHITE);
+		btn_ViewSales.setFont(new Font("Tahoma", Font.BOLD, 33));
+		btn_ViewSales.setBorderPainted(false);
+		btn_ViewSales.setBorder(new EmptyBorder(0, 0, 0, 0));
+		btn_ViewSales.setBackground(new Color(255, 204, 0));
+		btn_ViewSales.setBounds(1103, 224, 377, 290);
+		contentPane.add(btn_ViewSales);
 		
 
 	}

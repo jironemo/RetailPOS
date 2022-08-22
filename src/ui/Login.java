@@ -20,6 +20,7 @@ import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.border.LineBorder;
 public class Login extends LoginController {
 
 	private JFrame frmLogin;
@@ -73,6 +74,7 @@ public class Login extends LoginController {
 		txtUser.setColumns(10);
 		
 		JButton btnNewButton = new JButton("Login");
+		btnNewButton.setBorder(new LineBorder(new Color(255, 204, 0), 3, true));
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -82,21 +84,22 @@ public class Login extends LoginController {
 			}
 		});
 	
-		btnNewButton.setForeground(Color.WHITE);
-		btnNewButton.setBackground(Color.GREEN);
+		btnNewButton.setForeground(new Color(0, 153, 0));
+		btnNewButton.setBackground(new Color(255, 255, 0));
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnNewButton.setBounds(598, 304, 115, 42);
 		frmLogin.getContentPane().add(btnNewButton);
 		
 		JButton btnCancel = new JButton("Cancel");
+		btnCancel.setBorder(new LineBorder(new Color(255, 204, 0), 3, true));
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frmLogin.dispose();
 			}
 		});
 		
-		btnCancel.setForeground(Color.WHITE);
-		btnCancel.setBackground(Color.RED);
+		btnCancel.setForeground(new Color(0, 153, 0));
+		btnCancel.setBackground(new Color(255, 204, 102));
 		btnCancel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnCancel.setBounds(458, 304, 115, 42);
 		frmLogin.getContentPane().add(btnCancel);
@@ -118,7 +121,7 @@ public class Login extends LoginController {
 		
 		JLabel icon = new JLabel("");
 		icon.setIconTextGap(0);
-		icon.setIcon(new ImageIcon(Login.class.getResource("/resources/woman.png")));
+		icon.setIcon(new ImageIcon(Login.class.getResource("/resources/boy.png")));
 		icon.setBounds(41, 125, 290, 249);
 		frmLogin.getContentPane().add(icon);
 	}

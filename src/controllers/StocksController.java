@@ -1,4 +1,5 @@
 package controllers;
+import java.awt.Component;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,6 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import utilities.NonEditTableModel;
+
+import javax.swing.JComboBox;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import utilities.DBConnector;
@@ -38,22 +43,37 @@ public class StocksController {
 		}
 		
 	}
-	
-	public static List<String> getComboData() {
-		List<String> g = new ArrayList<String>();
+	@SuppressWarnings("unchecked")
+	public static void getStocks(JTable table,Component[] textfield) {
+		
+		for(int i = 0; i < 5;i++) {
+			Object selected = table.getValueAt(table.getSelectedRow(), i);
+			if(i == 2) {
+				((JComboBox<String>)textfield[i]).setSelectedItem(selected.toString());
+
+			}
+			else ((JTextField)textfield[i]).setText(selected.toString());
+		}
+	}
+	public static void setComboData(JComboBox<String> txtCategory) {
+
+		List<String> combodata = new ArrayList<String>();
 		Connection con = new DBConnector().getConnection();
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT category_name from category");
 			while(rs.next()){
-				g.add(rs.getString(1));
+
+				txtCategory.addItem(rs.getString(1));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return g;	
+		for(int i = 0; i < combodata.size();i++) {
+		}
+		txtCategory.setSelectedItem("");
 		};
 
 	}
-
+	

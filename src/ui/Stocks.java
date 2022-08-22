@@ -21,11 +21,7 @@ import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JComboBox;
-import java.util.List;
-import javax.swing.border.EmptyBorder;
 import javax.swing.SwingConstants;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.border.BevelBorder;
 @SuppressWarnings("serial")
 public class Stocks extends JFrame {
@@ -64,7 +60,7 @@ public class Stocks extends JFrame {
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		contentPane = new JPanel();
 		contentPane.setSize(1920,1080);
-		contentPane.setBackground(new Color(51, 204, 102));
+		contentPane.setBackground(new Color(255, 204, 0));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
@@ -171,11 +167,8 @@ public class Stocks extends JFrame {
 		panel.add(btnDeleteData);
 		
 
-		List<String> combodata = StocksController.getComboData();
-		for(int i = 0; i < combodata.size();i++) {
-			txtCategory.addItem(combodata.get(i));
-		}
-		txtCategory.setSelectedItem("");
+		StocksController.setComboData(txtCategory);
+
 		
 		JButton btn_Stock = new JButton("Add Item");
 
@@ -183,7 +176,7 @@ public class Stocks extends JFrame {
 		btn_Stock.setForeground(Color.WHITE);
 		btn_Stock.setFont(new Font("Tahoma", Font.BOLD, 33));
 		btn_Stock.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btn_Stock.setBackground(new Color(0, 139, 139));
+		btn_Stock.setBackground(new Color(255, 204, 102));
 		btn_Stock.setActionCommand("ADD STOCK");
 		btn_Stock.setBounds(10, 12, 205, 71);
 		contentPane.add(btn_Stock);
@@ -193,23 +186,16 @@ public class Stocks extends JFrame {
 		btn_AddSale.setForeground(Color.WHITE);
 		btn_AddSale.setFont(new Font("Tahoma", Font.BOLD, 33));
 		btn_AddSale.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btn_AddSale.setBackground(new Color(0, 139, 139));
+		btn_AddSale.setBackground(new Color(255, 204, 102));
 		btn_AddSale.setBounds(225, 11, 377, 72);
 		contentPane.add(btn_AddSale);
 		table.addMouseListener(new MouseAdapter() {
-			@SuppressWarnings("unchecked")
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 
 				Component[] textfield = {txtCode,txtName,txtCategory,txtStock,txtPrice};
-				for(int i = 0; i < 5;i++) {
-					Object selected = table.getValueAt(table.getSelectedRow(), i);
-					if(i == 2) {
-						((JComboBox<String>)textfield[i]).setSelectedItem(selected.toString());
-
-					}
-					else ((JTextField)textfield[i]).setText(selected.toString());
-				}
+				StocksController.getStocks(table,textfield);
 			}
 		});
 	}

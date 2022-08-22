@@ -5,17 +5,18 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
+import javax.swing.JComboBox;
 
 @SuppressWarnings("serial")
 public class AddNewItem extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField_5;
+	private JTextField id;
+	private JTextField name;
+	private JComboBox<String> category;
+	private JTextField unit;
+	private JTextField stock;
+	private JTextField price;
 
 	/**
 	 * Launch the application.
@@ -33,34 +34,33 @@ public class AddNewItem extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		textField = new JTextField();
-		textField.setBounds(117, 59, 268, 41);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		id = new JTextField();
+		id.setBounds(127, 83, 268, 41);
+		contentPane.add(id);
+		id.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(117, 133, 268, 41);
-		contentPane.add(textField_1);
+		name = new JTextField();
+		name.setColumns(10);
+		name.setBounds(127, 157, 268, 41);
+		contentPane.add(name);
 		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(117, 216, 268, 41);
-		contentPane.add(textField_2);
+		category = new JComboBox<String>();
+		category.setBounds(127, 240, 268, 41);
+		contentPane.add(category);
 		
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		textField_3.setBounds(117, 282, 268, 41);
-		contentPane.add(textField_3);
+		unit = new JTextField();
+		unit.setColumns(10);
+		unit.setBounds(127, 306, 268, 41);
+		contentPane.add(unit);
 		
-		textField_4 = new JTextField();
-		textField_4.setColumns(10);
-		textField_4.setBounds(117, 351, 268, 41);
-		contentPane.add(textField_4);
+		stock = new JTextField();
+		stock.setColumns(10);
+		stock.setBounds(127, 375, 268, 41);
+		contentPane.add(stock);
 		
-		textField_5 = new JTextField();
-		textField_5.setColumns(10);
-		textField_5.setBounds(117, 427, 268, 41);
-		contentPane.add(textField_5);
+		price = new JTextField();
+		price.setColumns(10);
+		price.setBounds(127, 451, 268, 41);
+		contentPane.add(price);
 	}
 }
