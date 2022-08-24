@@ -3,6 +3,8 @@ package ui;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
@@ -32,13 +34,16 @@ public class Dashboard extends JFrame {
 	public Dashboard() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0,0,1920, 1080);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		contentPane = new JPanel();
-		contentPane.setSize(1920,1080);
+		contentPane.setSize(1366,796);
 		contentPane.setBackground(Color.WHITE);
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
+		contentPane.setLayout(null);		
+		JPanel viewPanel = new JPanel();
+		viewPanel.setBounds(290, 140, 1366, 786);
+		contentPane.add(viewPanel);
+		viewPanel.setLayout(null);
+		setMinimumSize(new Dimension(1920,1080));
 		JButton btn_AddSale = new JButton("ADD SALE");
 		btn_AddSale.setForeground(Color.WHITE);
 		btn_AddSale.setBackground(new Color(255, 204, 0));
@@ -51,7 +56,7 @@ public class Dashboard extends JFrame {
 		btn_AddSale.setBorder(new EmptyBorder(0, 0, 0, 0));
 		btn_AddSale.setFont(new Font("Tahoma", Font.BOLD, 33));
 		btn_AddSale.setHorizontalTextPosition(SwingConstants.CENTER);
-		btn_AddSale.setBounds(678, 224, 377, 290);
+		btn_AddSale.setBounds(21, 231, 256, 65);
 		contentPane.add(btn_AddSale);
 		
 		JButton btn_Stock = new JButton("VIEW STOCKS");
@@ -60,7 +65,11 @@ public class Dashboard extends JFrame {
 		btn_Stock.setBackground(new Color(255, 204, 0));
 		btn_Stock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				WindowBridge.switchWindowsTemp(getDashboard(), new Stocks(getDashboard()));
+				//WindowBridge.switchWindowsTemp(getDashboard(), new Stocks(getDashboard()));
+				viewPanel.setVisible(false);
+				viewPanel.removeAll();
+				viewPanel.add(new StocksPanel());
+				viewPanel.setVisible(true);
 			}
 		});
 
@@ -69,12 +78,12 @@ public class Dashboard extends JFrame {
 		btn_Stock.setFont(new Font("Tahoma", Font.BOLD, 33));
 		btn_Stock.setBorderPainted(false);
 		btn_Stock.setBorder(new EmptyBorder(0, 0, 0, 0));
-		btn_Stock.setBounds(245, 225, 387, 289);
+		btn_Stock.setBounds(21, 140, 256, 65);
 		contentPane.add(btn_Stock);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(255, 204, 0));
-		panel.setBounds(0, 0, 1920, 60);
+		panel.setBounds(0, 0, 1766, 60);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
@@ -100,8 +109,9 @@ public class Dashboard extends JFrame {
 		btn_ViewSales.setBorderPainted(false);
 		btn_ViewSales.setBorder(new EmptyBorder(0, 0, 0, 0));
 		btn_ViewSales.setBackground(new Color(255, 204, 0));
-		btn_ViewSales.setBounds(1103, 224, 377, 290);
+		btn_ViewSales.setBounds(21, 310, 255, 60);
 		contentPane.add(btn_ViewSales);
+
 		
 
 	}

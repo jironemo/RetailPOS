@@ -59,18 +59,18 @@ public class Login extends LoginController {
 		frmLogin.getContentPane().setBackground(Color.WHITE);
 		frmLogin.setTitle("Login");
 		frmLogin.setResizable(false);
-		frmLogin.setBounds(100, 100, 750, 470);
+		frmLogin.setBounds(100, 100, 623, 400);
 		frmLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmLogin.getContentPane().setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("WELCOME!");
+		JLabel lblNewLabel = new JLabel("Welcome to AKS POS System");
 		lblNewLabel.setForeground(Color.ORANGE);
-		lblNewLabel.setFont(new Font("Arial Black", Font.PLAIN, 60));
-		lblNewLabel.setBounds(188, 23, 368, 80);
+		lblNewLabel.setFont(new Font("Arial Black", Font.PLAIN, 30));
+		lblNewLabel.setBounds(73, 23, 483, 80);
 		frmLogin.getContentPane().add(lblNewLabel);
 		txtUser = new JTextField();
 		txtUser.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		txtUser.setBounds(458, 167, 255, 42);
+		txtUser.setBounds(345, 144, 237, 42);
 		frmLogin.getContentPane().add(txtUser);
 		txtUser.setColumns(10);
 		
@@ -88,7 +88,7 @@ public class Login extends LoginController {
 		btnNewButton.setForeground(new Color(0, 153, 0));
 		btnNewButton.setBackground(new Color(255, 255, 0));
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnNewButton.setBounds(598, 304, 115, 42);
+		btnNewButton.setBounds(470, 300, 115, 42);
 		frmLogin.getContentPane().add(btnNewButton);
 		
 		JButton btnCancel = new JButton("Cancel");
@@ -102,28 +102,28 @@ public class Login extends LoginController {
 		btnCancel.setForeground(new Color(0, 153, 0));
 		btnCancel.setBackground(new Color(255, 204, 102));
 		btnCancel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnCancel.setBounds(458, 304, 115, 42);
+		btnCancel.setBounds(345, 300, 115, 42);
 		frmLogin.getContentPane().add(btnCancel);
 		
-		JLabel lblNewLabel_1 = new JLabel("Login");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblNewLabel_1.setBounds(395, 171, 53, 33);
+		JLabel lblNewLabel_1 = new JLabel("Username");
+		lblNewLabel_1.setFont(new Font("Georgia", Font.BOLD, 16));
+		lblNewLabel_1.setBounds(342, 114, 89, 33);
 		frmLogin.getContentPane().add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Password");
-		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblNewLabel_1_1.setBounds(364, 240, 78, 33);
+		lblNewLabel_1_1.setFont(new Font("Georgia", Font.BOLD, 16));
+		lblNewLabel_1_1.setBounds(345, 203, 121, 33);
 		frmLogin.getContentPane().add(lblNewLabel_1_1);
 		
 		txtPass = new JPasswordField();
 		txtPass.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		txtPass.setBounds(458, 236, 255, 42);
+		txtPass.setBounds(345, 236, 237, 42);
 		frmLogin.getContentPane().add(txtPass);
 		
 		JLabel icon = new JLabel("");
 		icon.setIconTextGap(0);
 		icon.setIcon(new ImageIcon(Login.class.getResource("/resources/boy.png")));
-		icon.setBounds(41, 125, 290, 249);
+		icon.setBounds(45, 93, 290, 249);
 		frmLogin.getContentPane().add(icon);
 	}
 }
