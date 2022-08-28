@@ -7,7 +7,7 @@ public class DBConnector {
 	Connection con = null;
 	public Connection getConnection() {
 		try {		
-			con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/pos?user=root&password=root");
+			con = DriverManager.getConnection("jdbc:mysql://192.168.137.1:3306/pos?user=root&password=root");
 			System.out.println("Connection Estabilshed");	
 		}catch(SQLException se) {
 			se.printStackTrace();

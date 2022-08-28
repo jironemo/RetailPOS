@@ -101,6 +101,21 @@ public class Dashboard extends JFrame  {
 		mainPanel.add(btn_ViewSales);
 		
 		setContentPane(mainPanel);
+		
+		JButton btn_Receipt = new JButton("DISPLAY RECEIPT");
+		btn_Receipt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				WindowBridge.switchWindowsTemp(getDashboard(), new ReceiptPrint());
+			}
+		});
+		btn_Receipt.setHorizontalTextPosition(SwingConstants.CENTER);
+		btn_Receipt.setForeground(Color.WHITE);
+		btn_Receipt.setFont(new Font("Tahoma", Font.BOLD, 23));
+		btn_Receipt.setBorderPainted(false);
+		btn_Receipt.setBorder(new EmptyBorder(0, 0, 0, 0));
+		btn_Receipt.setBackground(new Color(255, 204, 0));
+		btn_Receipt.setBounds(10, 294, 255, 60);
+		mainPanel.add(btn_Receipt);
 
 
 	}
