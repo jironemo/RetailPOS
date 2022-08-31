@@ -1,4 +1,5 @@
 package controllers;
+import java.awt.Color;
 import java.awt.Component;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import utilities.NonEditTableModel;
+import utilities.RowTable;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -14,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import utilities.DBConnector;
 
@@ -24,15 +27,19 @@ public class StocksController {
 
 	static Connection con = new DBConnector().getConnection();
 	static String[] values;
-	public static DefaultTableModel getData( ) {
+	public static DefaultTableModel getData(RowTable table) {
 		DefaultTableModel d = new NonEditTableModel();
 		
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT product_code,product_name,product_unit.unit_name,category.category_name,product.unit_instock,`unit_price(MMK)`,product.discount_percentage FROM pos.product inner join pos.category inner join pos.product_unit where pos.product.category_id = pos.category.category_id and product_unit.unit_id = product.unit_id;");
 			setHeaders(d);
+			
 			while(rs.next()){
-				d.addRow(new Object[] {rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7)});
+				d.addRow(new Object[] {rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getInt(5),rs.getString(6),rs.getString(7)});
+				if(rs.getInt(5) < 100) {
+					table.setRowColor(d.getRowCount()-1, Color.red,Color.white);
+				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -59,6 +66,7 @@ public class StocksController {
 			Object selected = table.getValueAt(table.getSelectedRow(), i);
 			if(i == 3) {
 				((JComboBox<String>)textfield[i]).setSelectedItem(selected.toString());
+				System.out.println(((JComboBox<String>)textfield[i]).getSelectedItem().toString());
 			}
 			else ((JTextField)textfield[i]).setText(selected.toString());
 		}
@@ -112,14 +120,14 @@ public class StocksController {
 	
 		String format = "UPDATE `pos`.`product`"
 				+ "SET"
-				+ "`product_name` ='%2$s',"
+				+ "`product_name` =\"%2$s\","
 				+ "`unit_id` = GET_UNIT('%3$s'),"
-				+ "`category_id` =GET_CATEGORY('%4$s'),"
+				+ "`category_id` =GET_CATEGORY(\"%4$s\"),"
 				+ "`unit_instock` = '%5$s',"
 				+ "`unit_price(MMK)` ='%6$s',"
 				+ "`discount_percentage` ='%7$s'"
 				+ "WHERE `product_code` ='%1$s';";
-		
+		System.out.println(values[3]);
 		String sql =String.format(format, (Object[])values);
 		PreparedStatement s;
 		try {

@@ -16,6 +16,8 @@ import javax.swing.table.DefaultTableModel;
 
 import controllers.StocksController;
 import utilities.Populator;
+import utilities.RowTable;
+
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import java.awt.event.MouseAdapter;
@@ -31,7 +33,7 @@ public class StocksPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTextField txtCode,txtName,txtStock,txtPrice,txtDiscount, txtUnit;
 	private JLabel lblCode,lblProductName,lblStock,lblUnitPrice,lblCategory,lblDiscount,lblUnit;
-	public static JTable table;
+	public static RowTable table;
 	private JComboBox<String> txtCategory;
 	private JPanel panel,contentPane;
 	private JButton btnCancel,btnDeleteData,btnOk,btnAddStock;
@@ -50,8 +52,6 @@ public class StocksPanel extends JPanel {
 		instantiateTable();
 		addEventListeners();
 		add(contentPane);
-		
-
 		
 
 	}
@@ -73,7 +73,7 @@ public class StocksPanel extends JPanel {
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				StocksController.updateData(labels, textfields);
-				table.setModel(StocksController.getData());
+				table.setModel(StocksController.getData(table));
 				StocksController.setTextBoxesNull(textfields);
 			}
 		});
@@ -121,7 +121,10 @@ public class StocksPanel extends JPanel {
 
 	private void instantiateTable() {
 		instantiateScrollPane();
-		table = new JTable();
+
+		table = new RowTable();
+		DefaultTableModel d = StocksController.getData(table);
+		table.setModel(d);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setRowHeight(20);
@@ -129,8 +132,6 @@ public class StocksPanel extends JPanel {
 		table.setFillsViewportHeight(true);
 		scrollPane.setViewportView(table);
 		scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
-		DefaultTableModel d = StocksController.getData();
-		table.setModel(d);
 
 		
 	}

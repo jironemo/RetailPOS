@@ -27,7 +27,7 @@ public class AddStockController {
 			if(result == 1) {
 				JOptionPane.showMessageDialog(null, "Insert successful", "Successful", JOptionPane.INFORMATION_MESSAGE);
 
-				StocksPanel.table.setModel(StocksController.getData());
+				StocksPanel.table.setModel(StocksController.getData(StocksPanel.table));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

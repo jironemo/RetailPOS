@@ -7,8 +7,10 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import controllers.AddSaleController;
+import custom_objects.ItemList;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -97,8 +99,10 @@ public class AddSale extends JFrame {
 		
 		btnPrintReceipt = new JButton("Print Receipt");
 		btnPrintReceipt.addActionListener(new ActionListener() {
+			
 			public void actionPerformed(ActionEvent e) {
-				WindowBridge.switchWindowsTemp(getAddSale(), new ReceiptPrint());
+				ItemList i = getItemList();
+				WindowBridge.switchWindowsTemp(getAddSale(), new ReceiptPrint(i));
 			}
 
 		});
@@ -175,6 +179,17 @@ public class AddSale extends JFrame {
 		
 	}
 
+	
+	ItemList getItemList() {
+		ItemList i = new ItemList();
+		for(int k = 0; k < table.getRowCount();k++) {
+			TableModel m = table.getModel();
+			
+			i.addItem(new String[]{m.getValueAt(k, 1)+" "+m.getValueAt(k, 2),m.getValueAt(k,3).toString(),m.getValueAt(k,4).toString()});
+			System.out.println(i.getItem(0)[0]);
+		}
+		return i;
+	}
 	protected void codeEnter(KeyEvent e, int box) {
 		// TODO Auto-generated method stub
 		DefaultTableModel t = (DefaultTableModel)(table.getModel());
