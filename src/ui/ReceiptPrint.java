@@ -9,13 +9,15 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
+import controllers.AddSaleController;
 import custom_objects.ItemList;
+import utilities.WindowBridge;
 
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JTextPane;
 import java.util.Date;
@@ -33,13 +35,20 @@ public class ReceiptPrint extends JFrame {
 	private JTextPane receipt;
 	private JButton btnPrintReceipt;
 	private ItemList items;
+	private double subtotal;
+	private double tax;
+	private double paid;
 	/**
 	 * Create the frame.
+	 * @param table 
 	 */
 
-	
-	public ReceiptPrint(ItemList i) {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	private AddSaleController saleController = new AddSaleController();
+	public ReceiptPrint(ItemList i,double subtotal, double tax,double paid, JTable table) {
+		this.subtotal = subtotal;
+		this.tax = tax;
+		this.paid=paid;
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 489, 665);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -62,6 +71,8 @@ public class ReceiptPrint extends JFrame {
 		btnPrintReceipt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				printReceipt();
+				saleController.processSale(table);
+				
 			}
 		});
 		btnPrintReceipt.setBounds(39, 573, 169, 42);
@@ -79,13 +90,15 @@ public class ReceiptPrint extends JFrame {
 		try {
 			PageFormat pf = new PageFormat();
 			Paper paper = new Paper();
+			paper.setSize(72* 80/ 25.4, receipt.getHeight());
 			pf.setPaper(paper);
-			receipt.getPrintable(null, null).print(receipt.getGraphics(), pf, ABORT);
 			receipt.print();
+
 		}  catch (PrinterException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		dispose();
 	}
 
 	private void setUpDocument() {
@@ -105,18 +118,34 @@ public class ReceiptPrint extends JFrame {
 			doc.insertString(doc.getLength(), new Date().toString()+"\n\n\n", null);
 			StyleConstants.setAlignment(parattr, StyleConstants.ALIGN_LEFT);
 			StyleConstants.setLeftIndent(parattr, (float) 5.0);
+			StyleConstants.setBold(parattr,true);
 			receipt.setParagraphAttributes(parattr, true);
-			int maxlength = items.getMaxLength();
+			doc.insertString(doc.getLength(), String.format("%-21s         %s        %s     %s\n", "Name","Price","Qty","Subtotal"), parattr);
+			StyleConstants.setBold(parattr, false);
 			for(int i = 0; i < items.getLength();i++) {
-				String[] item = items.getItem(i);
-				String spaces  = "";
-					for(int k = item[0].length(); k< maxlength;k++) {
-						spaces+=" ";
-					}
-				doc.insertString(doc.getLength(),item[0] + item[1]+"MMK"+spaces+"\t    " + item[2] +"\t"+ item[3]+"\n", parattr);
+				String[] item = items.getItemsForReceipt(i);
+				String truncate = "%.20s...";
+				String itemformat = String.format(truncate,item[0]);
+				String format = "%-25s  %6s\t%3s	 %5s\n";
+				String formattedString = String.format(format,itemformat,item[1],item[2],item[3]);
+				doc.insertString(doc.getLength(),formattedString, parattr);
 			}
-
 			receipt.setStyledDocument(doc);
+			String dash = "    ";
+			for(int i =0; i < 49;i++) {
+				dash+= "-";
+			}
+			doc.insertString(doc.getLength(), dash+"\n", parattr);
+			StyleConstants.setAlignment(parattr,StyleConstants.ALIGN_RIGHT);
+			StyleConstants.setBold(parattr,true);
+			StyleConstants.setFontSize(parattr, 14);
+			receipt.setParagraphAttributes( parattr,true);
+			String footer = "Subtotal: " + subtotal + "  \n" +
+							"Tax: "+tax + "  \n"+
+							"Total Payable: " + (subtotal+tax)+"  \n"+
+							"Paid Amount: " + paid + "  \n" +
+							"Change: " + (paid - (subtotal+tax))+"  ";
+			doc.insertString(doc.getLength(),footer, parattr);
 		}
 		catch (BadLocationException e) {
 			// TODO Auto-generated catch block

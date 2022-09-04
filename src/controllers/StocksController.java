@@ -16,7 +16,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 
 import utilities.DBConnector;
 
@@ -25,7 +24,7 @@ public class StocksController {
 	 * @wbp.parser.entryPoint
 	 */
 
-	static Connection con = new DBConnector().getConnection();
+	static Connection con = DBConnector.getConnection();
 	static String[] values;
 	public static DefaultTableModel getData(RowTable table) {
 		DefaultTableModel d = new NonEditTableModel();
@@ -66,7 +65,6 @@ public class StocksController {
 			Object selected = table.getValueAt(table.getSelectedRow(), i);
 			if(i == 3) {
 				((JComboBox<String>)textfield[i]).setSelectedItem(selected.toString());
-				System.out.println(((JComboBox<String>)textfield[i]).getSelectedItem().toString());
 			}
 			else ((JTextField)textfield[i]).setText(selected.toString());
 		}

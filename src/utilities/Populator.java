@@ -10,7 +10,7 @@ import java.util.List;
 import javax.swing.JComboBox;
 public class Populator {
 
-static Connection con = new DBConnector().getConnection();
+static Connection con = DBConnector.getConnection();
 	public static void setComboData(JComboBox<String> txtCategory) {
 
 		List<String> combodata = new ArrayList<String>();

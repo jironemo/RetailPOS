@@ -1,6 +1,5 @@
 package controllers;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -11,12 +10,11 @@ import utilities.Dehasher;
 
 public class LoginController {
 	public static boolean handleLogin(String txtUser, String txtPass) {
-		Connection con = new DBConnector().getConnection();
 		try {
 			String query = "select "
 					+ "(password) from pos.user where username = '" +txtUser+"'";
 			
-			Statement stmt = con.createStatement();
+			Statement stmt = DBConnector.getConnection().createStatement();
 			stmt.executeQuery(query);
 			stmt.getResultSet().next();
 			String password = stmt.getResultSet().getString(1);

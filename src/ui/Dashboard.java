@@ -8,15 +8,18 @@ import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-import utilities.WindowBridge;
+
+import utilities.DBConnector;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 @SuppressWarnings("serial")
 public class Dashboard extends JFrame  {
 
-	private JPanel mainPanel;
+	private JPanel mainPanel, viewPanel;
 
 	/**
 	 * Launch the application.
@@ -27,13 +30,22 @@ public class Dashboard extends JFrame  {
 	 * Create the frame.
 	 */
 	public Dashboard() {
+	addWindowListener(new WindowAdapter() {
+		@Override
+		public void windowClosed(WindowEvent e) {
+			DBConnector.closeConnection();
+		}
+		public void windowClosing(WindowEvent e) {
+			DBConnector.closeConnection();
+		}
+	});
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1366, 786);
 		mainPanel = new JPanel();
 		mainPanel.setSize(1366,786);
 		mainPanel.setBackground(Color.WHITE);
 		mainPanel.setLayout(null);		
-		JPanel viewPanel = new JPanel();
+		viewPanel = new JPanel();
 		viewPanel.setBounds(279, 71, 1050, 596);
 		mainPanel.add(viewPanel);
 		viewPanel.setLayout(null);
@@ -42,7 +54,7 @@ public class Dashboard extends JFrame  {
 		btn_AddSale.setBackground(new Color(255, 204, 0));
 		btn_AddSale.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				WindowBridge.switchWindowsTemp(getDashboard(), new AddSale(getDashboard()));
+				showAddSale();
 			}
 		});
 		btn_AddSale.setBorderPainted(false);
@@ -59,10 +71,7 @@ public class Dashboard extends JFrame  {
 		btn_Stock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//WindowBridge.switchWindowsTemp(getDashboard(), new Stocks(getDashboard()));
-				viewPanel.setVisible(false);
-				viewPanel.removeAll();
-				viewPanel.add(new StocksPanel());
-				viewPanel.setVisible(true);
+				showStocks();
 			}
 		});
 
@@ -91,6 +100,11 @@ public class Dashboard extends JFrame  {
 		lblDashboard.setFont(new Font("Roboto Black", Font.PLAIN, 50));
 		
 		JButton btn_ViewSales = new JButton("VIEW SALES");
+		btn_ViewSales.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showSales();
+			}
+		});
 		btn_ViewSales.setHorizontalTextPosition(SwingConstants.CENTER);
 		btn_ViewSales.setForeground(Color.WHITE);
 		btn_ViewSales.setFont(new Font("Tahoma", Font.BOLD, 33));
@@ -101,11 +115,36 @@ public class Dashboard extends JFrame  {
 		mainPanel.add(btn_ViewSales);
 		
 		setContentPane(mainPanel);
+		showStocks();
 		
-
 
 	}
 	
+	protected void showSales() {
+	// TODO Auto-generated method stub
+		viewPanel.setVisible(false);
+		viewPanel.removeAll();
+		viewPanel.add(new ReportView());
+		viewPanel.setVisible(true);
+}
+
+	protected void showAddSale() {
+	// TODO Auto-generated method stub
+
+		viewPanel.setVisible(false);
+		viewPanel.removeAll();
+		viewPanel.add(new AddSalePanel());
+		viewPanel.setVisible(true);
+}
+
+	protected void showStocks() {
+		// TODO Auto-generated method stub
+		viewPanel.setVisible(false);
+		viewPanel.removeAll();
+		viewPanel.add(new StocksPanel());
+		viewPanel.setVisible(true);
+	}
+
 	public JFrame getDashboard() {
 		return this;
 	}

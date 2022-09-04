@@ -12,9 +12,9 @@ import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JButton;
-import javax.swing.table.DefaultTableModel;
 
 import controllers.StocksController;
+import utilities.NonEditTableModel;
 import utilities.Populator;
 import utilities.RowTable;
 
@@ -119,11 +119,13 @@ public class StocksPanel extends JPanel {
 		contentPane.add(scrollPane);
 	}
 
+	@SuppressWarnings("static-access")
 	private void instantiateTable() {
 		instantiateScrollPane();
 
 		table = new RowTable();
-		DefaultTableModel d = StocksController.getData(table);
+		table.setSelectionMode(table.getSelectionModel().SINGLE_SELECTION);
+		NonEditTableModel d = (NonEditTableModel) StocksController.getData(table);
 		table.setModel(d);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -166,7 +168,7 @@ public class StocksPanel extends JPanel {
 		btnAddStock.setForeground(Color.WHITE);
 		btnAddStock.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnAddStock.setBackground(Color.GREEN);
-		btnAddStock.setBounds(10, 43, 132, 38);
+		btnAddStock.setBounds(546, 43, 132, 38);
 		contentPane.add(btnAddStock);
 	}
 
