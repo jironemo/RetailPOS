@@ -171,7 +171,7 @@ public class StocksController {
 			s = DBConnector.getConnection().createStatement();
 			ResultSet rs = s.executeQuery(query);
 			while(rs.next()) {
-				results.add(rs.getString(1)+" "+rs.getString(2)+"\t"+rs.getString(3));
+				results.add(rs.getString(1)+" "+rs.getString(2)+"\nRemaining Stock: "+rs.getString(3));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

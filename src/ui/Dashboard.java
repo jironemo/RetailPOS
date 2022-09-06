@@ -16,7 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.JTextField;
 @SuppressWarnings("serial")
 public class Dashboard extends JFrame  {
 
@@ -143,7 +142,6 @@ public class Dashboard extends JFrame  {
 		viewPanel.setVisible(false);
 		viewPanel.removeAll();
 		StocksPanel stocksPanel = new StocksPanel();
-		stocksPanel.table.setLocation(31, 30);
 		viewPanel.add(stocksPanel);
 		viewPanel.setVisible(true);
 	}

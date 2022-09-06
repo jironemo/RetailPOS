@@ -14,7 +14,6 @@ import javax.swing.text.StyledDocument;
 
 import controllers.AddSaleController;
 import custom_objects.ItemList;
-import utilities.WindowBridge;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -92,6 +91,7 @@ public class ReceiptPrint extends JFrame {
 			Paper paper = new Paper();
 			paper.setSize(72* 80/ 25.4, receipt.getHeight());
 			pf.setPaper(paper);
+			//receipt.getPrintable(null, null).print(receipt.getGraphics(), pf, 1);
 			receipt.print();
 
 		}  catch (PrinterException e) {
@@ -126,7 +126,7 @@ public class ReceiptPrint extends JFrame {
 				String[] item = items.getItemsForReceipt(i);
 				String truncate = "%.20s...";
 				String itemformat = String.format(truncate,item[0]);
-				String format = "%-25s  %6s\t%3s	 %5s\n";
+				String format = "%-25s\t%5s\t%5s\t%5s\n";
 				String formattedString = String.format(format,itemformat,item[1],item[2],item[3]);
 				doc.insertString(doc.getLength(),formattedString, parattr);
 			}

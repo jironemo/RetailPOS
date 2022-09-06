@@ -108,7 +108,7 @@ public class AddSalePanel extends JPanel {
 		columnResize();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setRowHeight(20);
-		table.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		table.setFont(new Font("Myanmar Text", Font.PLAIN, 14));
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
 		scrollPane.setViewportView(table);
