@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import utilities.NonEditTableModel;
 import utilities.RowTable;
@@ -145,13 +147,37 @@ public class StocksController {
 		getValues(textfields);
 		// TODO Auto-generated method stub
 		String message = "Please confirm update Data:\n";
-		for(int i = 1;i< textfields.length;i++) {
-			message += labels[i].getText() + ":\t"+ values[i] + "\n";
+			if(Integer.parseInt(((JTextField)textfields[4]).getText())<= 0){
+				JOptionPane.showMessageDialog(null, "Invalid stock amount");
+			}else {
+
+				for(int i = 1;i< textfields.length;i++) {
+					message += labels[i].getText() + ":\t"+ values[i] + "\n";
+				}
+				int result = JOptionPane.showConfirmDialog(null, message,"",JOptionPane.YES_NO_OPTION);
+				if(result == JOptionPane.YES_OPTION) {
+					updateData();
+					setTextBoxesNull(textfields);
+				}
 		}
-		int result = JOptionPane.showConfirmDialog(null, message,"",JOptionPane.YES_NO_OPTION);
-		if(result == JOptionPane.YES_OPTION) {
-			updateData();
+	}
+
+	public static List<String> checkStock(String str) {
+		// TODO Auto-generated method stub
+		String query = "select product.product_name,product_unit.unit_name, product.unit_instock from product inner join product_unit where product.unit_id = product_unit.unit_id and (product_code like \"%"+str+"%\" or product_name like \"%"+str+"%\")";
+		List<String> results = new ArrayList<String>();
+		Statement s;
+		try {
+			s = DBConnector.getConnection().createStatement();
+			ResultSet rs = s.executeQuery(query);
+			while(rs.next()) {
+				results.add(rs.getString(1)+" "+rs.getString(2)+"\t"+rs.getString(3));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		return results;
 	}
 	
 }

@@ -14,21 +14,19 @@ public class AddSaleController {
 	public String[] getRowOfData(String item_code) {
 		
 		try {
-			String query = "select product_code, product_name,unit_name,`unit_price(MMK)`,discount_percentage from product inner join product_unit where product.unit_id = product_unit.unit_id and product_code = '"+item_code+ "'";
+			String query = "select product_code, product_name,unit_name,`unit_price(MMK)`,discount_percentage,product.unit_instock from product inner join product_unit where product.unit_id = product_unit.unit_id and product_code = '"+item_code+ "'";
 			Statement s = DBConnector.getConnection().createStatement();
 			ResultSet rs = s.executeQuery(query);
 			if(rs.next()) {
-
 				if(rs.getDouble("discount_percentage")>0) {
 					String[] tr = {rs.getString(1),rs.getString(2),rs.getString(3),Double.toString(rs.getDouble(4)-(rs.getDouble(4)*(rs.getDouble(5)/100))),null};
 					return tr;
 				}
 				else {
-					  String[] tr ={rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),null};
-					  return tr;
+					String[] tr ={rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),null};
+					return tr;
 				}
-			}
-			else return null;
+			}else return(null);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			return null;
@@ -67,6 +65,22 @@ public class AddSaleController {
 			e.printStackTrace();
 		}
 		
+	}
+
+	public int getRemainingQuantity(String code) {
+		// TODO Auto-generated method stub
+		try {
+			String query = "select product.unit_instock from product where product_code = '"+code+"';";
+			Statement s = DBConnector.getConnection().createStatement();
+			ResultSet rs = s.executeQuery(query);
+			rs.next();
+			return rs.getInt(1);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return 0;
 	}
 	
 	
