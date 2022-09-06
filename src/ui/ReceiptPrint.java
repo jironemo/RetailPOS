@@ -55,7 +55,7 @@ public class ReceiptPrint extends JFrame {
 		contentPane.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(5, 5, 458, 546);
+		scrollPane.setBounds(10, 10, 460, 545);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		contentPane.add(scrollPane);
@@ -74,11 +74,11 @@ public class ReceiptPrint extends JFrame {
 				
 			}
 		});
-		btnPrintReceipt.setBounds(39, 573, 169, 42);
+		btnPrintReceipt.setBounds(10, 570, 170, 40);
 		contentPane.add(btnPrintReceipt);
 		
 		JButton btnCancel = new JButton("Cancel");
-		btnCancel.setBounds(294, 573, 169, 42);
+		btnCancel.setBounds(300, 570, 170, 40);
 		contentPane.add(btnCancel);
 		items = i;
 		setUpDocument();

@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -14,7 +15,8 @@ public class AddSaleController {
 	public String[] getRowOfData(String item_code) {
 		
 		try {
-			String query = "select product_code, product_name,unit_name,`unit_price(MMK)`,discount_percentage,product.unit_instock from product inner join product_unit where product.unit_id = product_unit.unit_id and product_code = '"+item_code+ "'";
+			System.out.println("CODE:"+item_code);
+			String query = "select product_code, product_name,unit_name,`unit_price(MMK)`,discount_percentage,product.unit_instock from product inner join product_unit where product.unit_id = product_unit.unit_id and (product_code = '"+item_code+ "' or product_name = '"+item_code+"')";
 			Statement s = DBConnector.getConnection().createStatement();
 			ResultSet rs = s.executeQuery(query);
 			if(rs.next()) {
@@ -70,17 +72,39 @@ public class AddSaleController {
 	public int getRemainingQuantity(String code) {
 		// TODO Auto-generated method stub
 		try {
-			String query = "select product.unit_instock from product where product_code = '"+code+"';";
+			String query = "select product.unit_instock from product where (product_code = '"+code+"' or product_name = '"+code+"');";
 			Statement s = DBConnector.getConnection().createStatement();
 			ResultSet rs = s.executeQuery(query);
 			rs.next();
 			return rs.getInt(1);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Wrong Item Code");
 		}
 		
 		return 0;
+	}
+
+	public String[] getSuggestions(String input) {
+		String[] output = {};
+		try {
+			String query = "select product.product_name from product where product_code like '"+input+"%' or product_name like '"+input+"%';";
+			Statement s = DBConnector.getConnection().createStatement();
+			ResultSet rs = s.executeQuery(query);
+			output = new String[9];
+			int i = 0;
+			while(rs.next() && i < 9) {
+				output[i] = rs.getString(1);
+				i++;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			//JOptionPane.showMessageDialog(null, "Wrong Item Code");
+			e.printStackTrace();
+		}
+		return output;
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

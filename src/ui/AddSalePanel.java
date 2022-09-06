@@ -16,8 +16,13 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -27,6 +32,11 @@ import javax.swing.ScrollPaneConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.border.MatteBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.JList;
+import javax.swing.DefaultListModel;
+import javax.swing.DropMode;
 @SuppressWarnings("serial")
 public class AddSalePanel extends JPanel {
 
@@ -38,7 +48,8 @@ public class AddSalePanel extends JPanel {
 	private JLabel lblCode,lblSubtotal,lblTax,lblDate,lblQty,lblPaid;
 	private JTable table;
 	private JButton btnPrintReceipt;
-	private JScrollPane scrollPane;
+	private JScrollPane scrollPane,scrollPane_1;
+	private JList<String> list;
 	/**
 	 * Create the frame.
 	 */
@@ -57,10 +68,7 @@ public class AddSalePanel extends JPanel {
 		addTextBoxListeners();
 		instantiateButtons();
 		instantiateTable();
-		
 
-		
-		
 	}
 	
 	private void instantiateButtons() {
@@ -104,7 +112,19 @@ public class AddSalePanel extends JPanel {
 			new String[] {
 				"Product code", "Product Name", "Unit", "Unit Price", "Qty"
 			}
-		));
+		) {
+			boolean[] columnEditables = new boolean[] {
+				false, false, false, false, true
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
+		table.getColumnModel().getColumn(0).setPreferredWidth(152);
+		table.getColumnModel().getColumn(1).setPreferredWidth(252);
+		table.getColumnModel().getColumn(2).setPreferredWidth(90);
+		table.getColumnModel().getColumn(3).setPreferredWidth(68);
+		table.getColumnModel().getColumn(4).setPreferredWidth(29);
 		columnResize();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setRowHeight(20);
@@ -126,12 +146,6 @@ public class AddSalePanel extends JPanel {
 	}
 
 	private void columnResize() {
-
-		table.getColumnModel().getColumn(0).setPreferredWidth(152);
-		table.getColumnModel().getColumn(1).setPreferredWidth(252);
-		table.getColumnModel().getColumn(2).setPreferredWidth(90);
-		table.getColumnModel().getColumn(3).setPreferredWidth(68);
-		table.getColumnModel().getColumn(4).setPreferredWidth(29);
 	}
 
 	private void instatiateScrollPane() {
@@ -146,7 +160,14 @@ public class AddSalePanel extends JPanel {
 		txt_Code.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				codeEnter(e,1);
+				if(e.getKeyCode() ==KeyEvent.VK_ENTER) 
+						codeEnter(e,1);
+				else if(e.getKeyCode() == KeyEvent.VK_TAB) {
+					focusGrabber(2);
+				}
+				else{
+					getSuggestions();
+				}
 			}
 		});
 		txt_Qty.addKeyListener(new KeyAdapter() {
@@ -160,12 +181,65 @@ public class AddSalePanel extends JPanel {
 				codeEnter(e,3);
 			}
 		});
-		
+		list.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				if(e.getClickCount() == 2) {
+					txt_Code.setText(list.getSelectedValue());
+					list.setVisible(false);
+					scrollPane_1.setVisible(false);
+					focusGrabber(1);
+					list.clearSelection();
+					//codeEnter(new KeyEvent(txt_Code, 0, 0, 0, KeyEvent.VK_TAB,'\n', 1), 1);
+				}
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			
+		});
 	}
 
 
 	
-	
+
+	protected void getSuggestions() {
+		// TODO Auto-generated method stub
+		String[] items = asc.getSuggestions(txt_Code.getText());
+		DefaultListModel<String> k = new DefaultListModel<String>();
+		for(String item : items) {
+			k.addElement(item);
+		}
+		list.setModel(k);
+		list.setVisible(true);
+		scrollPane_1.setVisible(true);
+		list.clearSelection();
+	}
+
 	@SuppressWarnings("null")
 	protected void codeEnter(KeyEvent e, int box) {
 		// TODO Auto-generated method stub
@@ -191,9 +265,10 @@ public class AddSalePanel extends JPanel {
 				}
 			}
 			if(alrdyExists(code)==false) {
+				System.out.println(code);
 				item = asc.getRowOfData(code);
-				item[4] = Integer.toString(qty);
 				if(item != null) {
+					item[4] = Integer.toString(qty);
 					if(remainingQuantity- qty > 0) {
 						asc.addRowToTable(table, item);
 						updateLabels(item[3],qty);
@@ -229,8 +304,8 @@ public class AddSalePanel extends JPanel {
 
 	ItemList getItemList() {
 		ItemList i = new ItemList();
+		TableModel m = table.getModel();
 		for(int k = 0; k < table.getRowCount();k++) {
-			TableModel m = table.getModel();
 			i.addItem(new String[]{m.getValueAt(k, 1)+" "+m.getValueAt(k, 2),m.getValueAt(k,3).toString(),m.getValueAt(k,4).toString()});
 		}
 		return i;
@@ -272,6 +347,8 @@ public class AddSalePanel extends JPanel {
 		for(int i =  0; i < row;i++) {
 			if(table.getValueAt(i,0).toString().equals(string)) {
 				return true;
+			}else if(table.getValueAt(i, 1).toString().equals(string)) {
+				return true;
 			}
 		}
 		return false;
@@ -312,6 +389,16 @@ public class AddSalePanel extends JPanel {
 	
 	private void instantiateLabels() {
 		setLayout(null);
+		
+		scrollPane_1 = new JScrollPane();
+		scrollPane_1.setVisible(false);
+		scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane_1.setBounds(531, 56, 162, 148);
+		add(scrollPane_1);
+		
+		list = new JList<String>();
+		list.setVisible(false);
+		scrollPane_1.setViewportView(list);
 		lblCode = new JLabel("Item Code\r\n");
 		lblCode.setForeground(new Color(248, 248, 255));
 		lblCode.setFocusable(false);

@@ -3,10 +3,15 @@ package ui;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.DateFormatter;
 
 import utilities.DBConnector;
 
@@ -20,7 +25,10 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.awt.event.ActionEvent;
+import com.toedter.calendar.JDateChooser;
 
 public class ReportView extends JPanel {
 
@@ -57,62 +65,75 @@ public class ReportView extends JPanel {
 		populateReport();
 		scrollPane.setViewportView(table);
 		
-		JComboBox<String> comMonth = new JComboBox<String>();
-		comMonth.setModel(new DefaultComboBoxModel<String>(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
-		comMonth.setEditable(true);
-		comMonth.setBounds(76, 6, 101, 35);
-		add(comMonth);
-		
-		JComboBox<String> comDay = new JComboBox<String>();
-		comDay.setModel(new DefaultComboBoxModel<String>(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
-		comDay.setEditable(true);
-		comDay.setBounds(249, 6, 57, 35);
-		add(comDay);
-		
-		JComboBox<String> comYear = new JComboBox<String>();
-		comYear.setModel(new DefaultComboBoxModel<String>(new String[] {"2020", "2021", "2022"}));
-		comYear.setEditable(true);
-		comYear.setBounds(381, 6, 113, 35);
-		add(comYear);
-		
-		JLabel lblNewLabel = new JLabel("Month");
+		JLabel lblNewLabel = new JLabel("Select Last Date");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel.setBounds(30, 11, 57, 25);
+		lblNewLabel.setBounds(399, 21, 98, 25);
 		add(lblNewLabel);
-		
-		JLabel lblDay = new JLabel("Day");
-		lblDay.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblDay.setBounds(214, 11, 25, 25);
-		add(lblDay);
-		
-		JLabel lblYea = new JLabel("Year");
-		lblYea.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblYea.setBounds(349, 11, 27, 25);
-		add(lblYea);
-		
-		JButton btnNewButton = new JButton("Filter");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+
+		JDateChooser chooserFirstDate = new JDateChooser();
+		chooserFirstDate.setBounds(138, 16, 191, 35);
+		add(chooserFirstDate);
+		JDateChooser chooserLastDate = new JDateChooser();
+		chooserLastDate.getDateEditor().addPropertyChangeListener("date",new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				Statement s = null;
+				ResultSet rs = null;
+				DefaultTableModel d = (DefaultTableModel)table.getModel();
+				d.setRowCount(0);
 				try {
-					Statement s= DBConnector.getConnection().createStatement();
-					String date = comYear.getSelectedItem().toString() + "-" + (comMonth.getSelectedItem().toString()) + "-" +(comDay.getSelectedItem().toString());
-					String query = String.format("CALL GET_SALES_BY_DATE('%1s')",date);
-					ResultSet rs = s.executeQuery(query);
-					DefaultTableModel d = (DefaultTableModel)table.getModel();
-					d.setRowCount(0);
-					while(rs.next()) {
-						Object[] k = {rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5)};
-						d.addRow(k);
-					}
-					
-				} catch (SQLException e1) {
+					s = DBConnector.getConnection().createStatement();
+				} catch (SQLException e) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					e.printStackTrace();
 				}
+				// TODO Auto-generated method stub
+				if(chooserFirstDate.getDate() == null) {
+					try {
+						String date = new SimpleDateFormat("yyyy-MM-dd").format(evt.getNewValue());
+						String query = String.format("CALL GET_SALES_BY_DATE('%1s')",date);
+						rs = s.executeQuery(query);
+						while(rs.next()) {
+							Object[] k = {rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5)};
+							d.addRow(k);
+						}
+						
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}else {
+					String lastdate = new SimpleDateFormat("yyyy-MM-dd").format(evt.getNewValue());
+					String firstdate = new SimpleDateFormat("yyyy-MM-dd").format(chooserFirstDate.getDate());
+					String query = String.format("CALL GET_SALES_BY_2_DATES('%1s','%2s')",firstdate,lastdate);
+					System.out.println(firstdate);
+					try {
+						
+						rs = s.executeQuery(query);
+						while(rs.next()) {
+							Object[] k = {rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5)};
+							d.addRow(k);
+						}
+						
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				
 			}
+			
 		});
-		btnNewButton.setBounds(507, 12, 89, 23);
-		add(btnNewButton);
+		chooserLastDate.setBounds(507, 16, 191, 35);
+		add(chooserLastDate);
+		
+		JLabel lblSelectFirstDate = new JLabel("Select First Date");
+		lblSelectFirstDate.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblSelectFirstDate.setBounds(30, 21, 98, 25);
+		add(lblSelectFirstDate);
+		
+		
 		
 
 	}

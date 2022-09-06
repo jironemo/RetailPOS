@@ -221,6 +221,8 @@ public class StocksPanel extends JPanel {
 		table.setSelectionMode(table.getSelectionModel().SINGLE_SELECTION);
 		NonEditTableModel d = (NonEditTableModel) StocksController.getData(table);
 		table.setModel(d);
+		table.setBackground(new Color(153,204,225));
+		table.setSelectionBackground(Color.LIGHT_GRAY);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setRowHeight(20);
