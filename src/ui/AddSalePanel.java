@@ -34,6 +34,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.border.MatteBorder;
 import javax.swing.JList;
 import javax.swing.DefaultListModel;
+import java.awt.SystemColor;
+import javax.swing.SwingConstants;
 @SuppressWarnings("serial")
 public class AddSalePanel extends JPanel {
 
@@ -42,40 +44,63 @@ public class AddSalePanel extends JPanel {
 	private double tax = 0.0;
 	private double paid = 0.0;
 	private AddSaleController asc = new AddSaleController();
-	private JLabel lblCode,lblSubtotal,lblTax,lblDate,lblQty,lblPaid;
+	private JLabel lblCode,lblSubtotal,lblTax,lblDate,lblQty,lblPaid,subtotal_text,tax_text;
 	private JTable table;
 	private JButton btnPrintReceipt;
-	private JScrollPane scrollPane,scrollPane_1;
+	private JScrollPane scrollPane;
 	private JList<String> list;
+	private JScrollPane scrollPane_1;
+	private int language;
 	/**
 	 * Create the frame.
 	 */
-	public AddSalePanel() {
-
+	public AddSalePanel(int language) {
 		setSize(1050, 596);
 		setFocusTraversalKeysEnabled(false);
 		setFocusTraversalPolicyProvider(true);
-		setBackground(new Color(102, 102, 225));
+		setBackground(new Color(252,225,59));
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLayout(null);
 
-		
+		this.language  = language;
 		instantiateLabels();
 		instantiateTextFields();
-		addTextBoxListeners();
 		instantiateButtons();
 		instantiateTable();
 		
-		System.out.println(txt_Code.getFont().getFontName());
-
+		addTextBoxListeners();
+		setText(language);
 	}
 	
+	void setText(int language) {
+		// TODO Auto-generated method stub
+		if(language == 0) {
+			lblCode.setText("Scan Barcode or Enter Name");
+			subtotal_text.setText("Subtotal:");
+			tax_text.setText("Tax:");
+			lblQty.setText("Qty");
+			lblPaid.setText("Paid");
+			btnPrintReceipt.setText("Print Receipt");
+		}
+		else if(language == 1) {
+			lblCode.setText("ပစ္စည်းအမည် (သို့) ဘားကုဒ်:");
+			subtotal_text.setText("ပစ္စည်းတန်ဖိုး:");
+			lblQty.setText("အရေအတွက်");
+			tax_text.setText("အခွန်:");
+			lblPaid.setText("ပေးထားငွေ");
+			btnPrintReceipt.setText("ဘောက်ချာဖြတ်မည်");
+		}
+	}
+	public void updatelanguage(int language) {
+		this.language = language;
+	}
 	private void instantiateButtons() {
 
 		btnPrintReceipt = new JButton("Print Receipt");
+		btnPrintReceipt.setFont(new Font("Myanmar Text", Font.PLAIN, 15));
 		btnPrintReceipt.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		btnPrintReceipt.setBackground(new Color(0, 120, 215));
-		btnPrintReceipt.setForeground(new Color(255, 255, 255));
+		btnPrintReceipt.setBackground(SystemColor.control);
+		btnPrintReceipt.setForeground(SystemColor.controlText);
 		btnPrintReceipt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(txt_Paid.getText().isBlank()) {
@@ -86,7 +111,7 @@ public class AddSalePanel extends JPanel {
 					paid = Double.parseDouble(txt_Paid.getText());
 					ItemList items = getItemList();
 					if(paid >= total_payable) {
-						ReceiptPrint r = new ReceiptPrint(items,subtotal,tax,paid,table);
+						ReceiptPrint r = new ReceiptPrint(items,subtotal,tax,paid,table,language);
 						r.setVisible(true);
 					}else {
 						JOptionPane.showMessageDialog(null, "Error: Paid Amount is not enough");
@@ -102,9 +127,12 @@ public class AddSalePanel extends JPanel {
 	private void instantiateTable() {
 		instatiateScrollPane();
 		table = new JTable();
-		table.setSelectionForeground(new Color(255, 255, 255));
-		table.setGridColor(new Color(0, 128, 0));
-		table.setBackground(new Color(153,204,225));
+		table.setDoubleBuffered(true);
+		table.setShowVerticalLines(false);
+		table.setShowHorizontalLines(false);
+		table.setSelectionForeground(new Color(252, 225, 59));
+		table.setGridColor(new Color(102, 204, 255));
+		table.setBackground(new Color(252, 225, 59));
 		table.setFillsViewportHeight(true);
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
@@ -133,6 +161,24 @@ public class AddSalePanel extends JPanel {
 		
 		scrollPane.setViewportView(table);
 		
+		subtotal_text = new JLabel();
+		subtotal_text.setHorizontalAlignment(SwingConstants.TRAILING);
+		subtotal_text.setText("Subtotal:");
+		subtotal_text.setForeground(Color.BLACK);
+		subtotal_text.setFont(new Font("Myanmar Text", Font.PLAIN, 15));
+		subtotal_text.setFocusable(false);
+		subtotal_text.setBounds(205, 516, 181, 37);
+		add(subtotal_text);
+		
+		tax_text = new JLabel();
+		tax_text.setText("Tax:");
+		tax_text.setHorizontalAlignment(SwingConstants.TRAILING);
+		tax_text.setForeground(Color.BLACK);
+		tax_text.setFont(new Font("Myanmar Text", Font.PLAIN, 15));
+		tax_text.setFocusable(false);
+		tax_text.setBounds(205, 557, 181, 36);
+		add(tax_text);
+		
 		
 		table.addKeyListener(new KeyAdapter() {
 			@Override
@@ -150,6 +196,7 @@ public class AddSalePanel extends JPanel {
 
 	private void instatiateScrollPane() {
 		scrollPane = new JScrollPane();
+		scrollPane.setBackground(SystemColor.control);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBounds(234, 63, 592, 444);
 		add(scrollPane);
@@ -269,7 +316,6 @@ public class AddSalePanel extends JPanel {
 				}
 			}
 			if(alrdyExists(code)==false) {
-				System.out.println(code);
 				item = asc.getRowOfData(code);
 				if(item != null) {
 					item[4] = Integer.toString(qty);
@@ -319,8 +365,8 @@ public class AddSalePanel extends JPanel {
 		// TODO Auto-generated method stub
 		subtotal += Double.parseDouble(price)*qty;
 		tax = subtotal * 0.02;
-		lblSubtotal.setText("Subtotal:\t"+subtotal);
-		lblTax.setText("Tax:\t"+new DecimalFormat("#.00").format(tax));
+		lblSubtotal.setText(new DecimalFormat("#.00").format(subtotal));
+		lblTax.setText(new DecimalFormat("#.00").format(tax));
 	}
 
 	private void focusGrabber(int box) {
@@ -363,16 +409,20 @@ public class AddSalePanel extends JPanel {
 	private void instantiateTextFields() {
 		// TODO Auto-generated method stub
 		txt_Code = new JTextField();
+		txt_Code.setFont(new Font("Myanmar Text", Font.PLAIN, 15));
+		txt_Code.setForeground(SystemColor.windowText);
 		txt_Code.setBorder(new LineBorder(new Color(171, 173, 179), 1, true));
-		txt_Code.setBounds(531, 28, 162, 28);
+		txt_Code.setBounds(481, 28, 162, 28);
 		add(txt_Code);
 		txt_Qty = new JTextField();
+		txt_Qty.setForeground(SystemColor.windowText);
 		txt_Qty.setBorder(new LineBorder(new Color(171, 173, 179), 1, true));
 		txt_Qty.setBounds(767, 28, 59, 28);
 		add(txt_Qty);
 		txt_Paid = new JTextField();
+		txt_Paid.setForeground(SystemColor.windowText);
 		txt_Paid.setBorder(new LineBorder(new Color(171, 173, 179), 1, true));
-		txt_Paid.setBounds(685, 512, 141, 28);
+		txt_Paid.setBounds(685, 520, 141, 28);
 		add(txt_Paid);
 		JTextField[] fields = {txt_Code,txt_Qty,txt_Paid};
 
@@ -398,53 +448,59 @@ public class AddSalePanel extends JPanel {
 		setLayout(null);
 		
 		scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(481, 56, 286, 152);
 		scrollPane_1.setVisible(false);
-		scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane_1.setBounds(531, 56, 295, 148);
 		add(scrollPane_1);
 		
 		list = new JList<String>();
-		list.setVisible(false);
+		list.setLocation(481, 0);
 		scrollPane_1.setViewportView(list);
+		list.setVisible(false);
+		
+		
 		lblCode = new JLabel("Scan Barcode or Enter Name\n");
-		lblCode.setForeground(new Color(248, 248, 255));
+		lblCode.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblCode.setForeground(SystemColor.windowText);
 		lblCode.setFocusable(false);
-		lblCode.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblCode.setBounds(338, 34, 180, 17);
+		lblCode.setFont(new Font("Myanmar Text", Font.PLAIN, 15));
+		lblCode.setBounds(180, 28, 291, 28);
 		add(lblCode);
 		
-		lblSubtotal = new JLabel("Subtotal:");
-		lblSubtotal.setForeground(new Color(248, 248, 255));
+		lblSubtotal = new JLabel();
+		lblSubtotal.setForeground(SystemColor.windowText);
 		lblSubtotal.setFocusable(false);
-		lblSubtotal.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblSubtotal.setBounds(234, 515, 238, 22);
+		lblSubtotal.setFont(new Font("Myanmar Text", Font.PLAIN, 15));
+		lblSubtotal.setBounds(395, 523, 181, 22);
 		add(lblSubtotal);
 		
 		lblDate = new JLabel("New label");
-		lblDate.setForeground(new Color(248, 248, 255));
-		lblDate.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblDate.setBounds(632, 11, 194, 17);
+		lblDate.setForeground(SystemColor.windowText);
+		lblDate.setFont(new Font("Myanmar Text", Font.PLAIN, 12));
+		lblDate.setBounds(654, 2, 172, 22);
 		lblDate.setText(new Date().toString());
 		add(lblDate);
 		
-		lblTax = new JLabel("Tax:");
-		lblTax.setForeground(new Color(248, 248, 255));
+		lblTax = new JLabel();
+		lblTax.setForeground(SystemColor.windowText);
 		lblTax.setFocusable(false);
-		lblTax.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblTax.setBounds(234, 557, 180, 20);
+		lblTax.setFont(new Font("Myanmar Text", Font.PLAIN, 15));
+		lblTax.setBounds(395, 565, 181, 20);
 		add(lblTax);
 		
-		lblQty = new JLabel("Quantity");
-		lblQty.setForeground(new Color(248, 248, 255));
+		lblQty = new JLabel("Qty");
+		lblQty.setVerticalAlignment(SwingConstants.TOP);
+		lblQty.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblQty.setForeground(SystemColor.windowText);
 		lblQty.setFocusable(false);
-		lblQty.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblQty.setBounds(703, 35, 53, 17);
+		lblQty.setFont(new Font("Myanmar Text", Font.PLAIN, 15));
+		lblQty.setBounds(654, 28, 102, 28);
 		add(lblQty);
 		
 		lblPaid = new JLabel("Paid Amount:");
-		lblPaid.setForeground(new Color(248, 248, 255));
-		lblPaid.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPaid.setBounds(596, 518, 83, 17);
+		lblPaid.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblPaid.setForeground(SystemColor.windowText);
+		lblPaid.setFont(new Font("Myanmar Text", Font.PLAIN, 15));
+		lblPaid.setBounds(531, 521, 148, 27);
 		add(lblPaid);
 	}
 
@@ -454,8 +510,8 @@ public class AddSalePanel extends JPanel {
 		subtotal -= Double.parseDouble(table.getValueAt(selectedRow, 3).toString()) * Double.parseDouble(table.getValueAt(selectedRow, 4).toString());
 		table.clearSelection();
 		d.removeRow(selectedRow);
-		lblSubtotal.setText("Subtotal: "+Double.toString(subtotal));
+		lblSubtotal.setText(Double.toString(subtotal));
 		tax = subtotal * 0.02;
-		lblTax.setText("Tax: "+Double.toString(tax));
+		lblTax.setText(Double.toString(tax));
 	}
 }	

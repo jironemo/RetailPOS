@@ -8,19 +8,16 @@ public class DBConnector {
     public static Connection getConnection()
     {
         if (con != null) {
-        	System.out.println("Con null: "+con!=null);
         	return con;
         }
-        // get db, user, pass from settings file
         return estaCon();
     }
 	private static Connection estaCon() {
 		try {
-			//con = DriverManager.getConnection("jdbc:mysql://192.168.137.1/pos?user=root&password=root");
-			con = DriverManager.getConnection("jdbc:mysql://localhost/pos?user=admin&password=root");
+			con = DriverManager.getConnection("jdbc:mysql://192.168.137.1/pos?user=root&password=root");
+			//con = DriverManager.getConnection("jdbc:mysql://localhost/pos?user=admin&password=root");
 			System.out.println("Connection Established");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return con;

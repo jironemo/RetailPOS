@@ -8,6 +8,8 @@ import javax.swing.JLabel;
 import java.awt.Font;
 
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
@@ -20,7 +22,7 @@ import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.border.LineBorder;
+import java.awt.SystemColor;
 public class Login extends LoginController {
 
 	private JFrame frmLogin;
@@ -54,6 +56,13 @@ public class Login extends LoginController {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		try {
+		UIManager.setLookAndFeel(UIManager.createLookAndFeel("Nimbus"));
+
+	} catch (UnsupportedLookAndFeelException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 		frmLogin = new JFrame();
 		frmLogin.setUndecorated(true);
 		frmLogin.getContentPane().setBackground(Color.WHITE);
@@ -64,7 +73,8 @@ public class Login extends LoginController {
 		frmLogin.getContentPane().setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Welcome to AKS POS System");
-		lblNewLabel.setForeground(Color.ORANGE);
+		lblNewLabel.setBackground(SystemColor.window);
+		lblNewLabel.setForeground(SystemColor.desktop);
 		lblNewLabel.setFont(new Font("Arial Black", Font.PLAIN, 30));
 		lblNewLabel.setBounds(73, 23, 483, 80);
 		frmLogin.getContentPane().add(lblNewLabel);
@@ -75,7 +85,6 @@ public class Login extends LoginController {
 		txtUser.setColumns(10);
 		
 		JButton btnNewButton = new JButton("Login");
-		btnNewButton.setBorder(new LineBorder(new Color(255, 204, 0), 3, true));
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -85,22 +94,21 @@ public class Login extends LoginController {
 			}
 		});
 	
-		btnNewButton.setForeground(new Color(0, 153, 0));
-		btnNewButton.setBackground(new Color(255, 255, 0));
+		btnNewButton.setForeground(SystemColor.desktop);
+		btnNewButton.setBackground(SystemColor.control);
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnNewButton.setBounds(470, 300, 115, 42);
 		frmLogin.getContentPane().add(btnNewButton);
 		
 		JButton btnCancel = new JButton("Cancel");
-		btnCancel.setBorder(new LineBorder(new Color(255, 204, 0), 3, true));
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frmLogin.dispose();
 			}
 		});
 		
-		btnCancel.setForeground(new Color(0, 153, 0));
-		btnCancel.setBackground(new Color(255, 204, 102));
+		btnCancel.setForeground(SystemColor.desktop);
+		btnCancel.setBackground(SystemColor.control);
 		btnCancel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnCancel.setBounds(345, 300, 115, 42);
 		frmLogin.getContentPane().add(btnCancel);

@@ -39,7 +39,7 @@ public class StocksController {
 			while(rs.next()){
 				d.addRow(new Object[] {rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getInt(5),rs.getString(6),rs.getString(7)});
 				if(rs.getInt(5) < 100) {
-					table.setRowColor(d.getRowCount()-1, Color.red,Color.white);
+					table.setRowColor(d.getRowCount()-1, new Color(206,61,49),Color.white);
 				}
 			}
 		} catch (SQLException e) {
@@ -127,7 +127,6 @@ public class StocksController {
 				+ "`unit_price(MMK)` ='%6$s',"
 				+ "`discount_percentage` ='%7$s'"
 				+ "WHERE `product_code` ='%1$s';";
-		System.out.println(values[3]);
 		String sql =String.format(format, (Object[])values);
 		PreparedStatement s;
 		try {

@@ -15,7 +15,6 @@ public class AddSaleController {
 	public String[] getRowOfData(String item_code) {
 		
 		try {
-			System.out.println("CODE:"+item_code);
 			String query = "select product_code, product_name,unit_name,`unit_price(MMK)`,discount_percentage,product.unit_instock from product inner join product_unit where product.unit_id = product_unit.unit_id and (product_code = \""+item_code+ "\" or product_name = \""+item_code+"\")";
 			Statement s = DBConnector.getConnection().createStatement();
 			ResultSet rs = s.executeQuery(query);
@@ -46,7 +45,6 @@ public class AddSaleController {
 		// TODO Auto-generated method stub
 		int rowCount = table.getRowCount();
 		String[][] listofItems = new String[rowCount][2];
-		System.out.println(rowCount);
 		int i = 0;
 		try {
 		Statement s = DBConnector.getConnection().createStatement();
@@ -55,7 +53,6 @@ public class AddSaleController {
 		while( i < rowCount) {
 				listofItems[i][0] = table.getValueAt(i, 1).toString();
 					listofItems[i][1] = table.getValueAt(i, 4).toString();
-					System.out.println("ID:"+ listofItems[i][0]);
 				String format = "CALL PROCESS_SALE(GET_PRODUCT_ID(\"%1s\"),\"%2s\")";
 				s.execute(String.format(format,listofItems[i][0] ,listofItems[i][1]));
 				i++;

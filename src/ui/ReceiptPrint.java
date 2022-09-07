@@ -13,8 +13,6 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
-import org.apache.batik.css.engine.value.css2.FontStyleManager;
-
 import controllers.AddSaleController;
 import custom_objects.ItemList;
 
@@ -47,7 +45,7 @@ public class ReceiptPrint extends JFrame {
 	 */
 
 	private AddSaleController saleController = new AddSaleController();
-	public ReceiptPrint(ItemList i,double subtotal, double tax,double paid, JTable table) {
+	public ReceiptPrint(ItemList i,double subtotal, double tax,double paid, JTable table, int language) {
 		this.subtotal = subtotal;
 		this.tax = tax;
 		this.paid=paid;
@@ -86,7 +84,7 @@ public class ReceiptPrint extends JFrame {
 		btnCancel.setBounds(300, 570, 170, 40);
 		contentPane.add(btnCancel);
 		items = i;
-		setUpDocument();
+		setUpDocument(language);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -96,7 +94,6 @@ public class ReceiptPrint extends JFrame {
 			Paper paper = new Paper();
 			paper.setSize(72* 80/ 25.4, receipt.getHeight());
 			pf.setPaper(paper);
-			//receipt.getPrintable(null, null).print(receipt.getGraphics(), pf, 1);
 			receipt.print();
 
 		}  catch (PrinterException e) {
@@ -106,7 +103,7 @@ public class ReceiptPrint extends JFrame {
 		dispose();
 	}
 
-	private void setUpDocument() {
+	private void setUpDocument(int language) {
 		// TODO Auto-generated method stub
 		try {
 			SimpleAttributeSet charattr = new SimpleAttributeSet();
@@ -117,15 +114,24 @@ public class ReceiptPrint extends JFrame {
 			StyleConstants.setFontSize(charattr, 20);
 			receipt.setParagraphAttributes(parattr, true);
 			receipt.setCharacterAttributes(charattr, true);
+		
 			receipt.setText("AKS Conveinence Store\n");
-			StyledDocument doc = receipt.getStyledDocument();;
+				
+			StyledDocument doc = receipt.getStyledDocument();
+			
 			StyleConstants.setFontSize(charattr, 14);
 			doc.insertString(doc.getLength(), new Date().toString()+"\n\n\n", null);
 			StyleConstants.setAlignment(parattr, StyleConstants.ALIGN_LEFT);
 			StyleConstants.setLeftIndent(parattr, (float) 5.0);
 			StyleConstants.setBold(parattr,true);
 			receipt.setParagraphAttributes(parattr, true);
-			doc.insertString(doc.getLength(), String.format("%-21s         %s        %s     %s\n", "Name","Price","Qty","Subtotal"), parattr);
+			if(language == 0){
+				doc.insertString(doc.getLength(), String.format("%-21s         %s        %s     %s\n", "Name","Price","Qty","Subtotal"), parattr);
+				
+			}else {
+				StyleConstants.setFontFamily(parattr, "Myanmar Text");
+				doc.insertString(doc.getLength(), String.format("%-21s         %s        %s     %s\n", "ပစ္စည်းအမျိုးအမည်","စျေးနှုန်း","ဦးရေ","ကျငွေ"), parattr);
+			}
 			StyleConstants.setBold(parattr, false);
 			for(int i = 0; i < items.getLength();i++) {
 				String[] item = items.getItemsForReceipt(i);
@@ -146,11 +152,21 @@ public class ReceiptPrint extends JFrame {
 			StyleConstants.setFontSize(parattr, 14);
 			receipt.setParagraphAttributes( parattr,true);
 			DecimalFormat df = new DecimalFormat("#.00");
-			String footer = "Subtotal: " + df.format(subtotal) + "  \n" +
-							"Tax: "+df.format(tax) + "  \n"+
-							"Total Payable: " + df.format(subtotal+tax)+"  \n"+
-							"Paid Amount: " + df.format(paid) + "  \n" +
-							"Change: " + df.format(paid - (subtotal+tax))+"  ";
+			String footer ="";
+			if(language == 0) {
+				footer = "Subtotal: " + df.format(subtotal) + " MMK  \n" +
+						"Tax: "+df.format(tax) + " MMK \n"+
+						"Total Payable: " + df.format(subtotal+tax)+" MMK  \n"+
+						"Paid Amount: " + df.format(paid) + " MMK \n" +
+						"Change: " + df.format(paid - (subtotal+tax))+" MMK ";
+			}else {
+				StyleConstants.setLineSpacing(parattr, 1);
+				footer = "ကျသင့်ငွေ: " + df.format(subtotal) + " ကျပ်  \n" +
+						"အခွန်: "+df.format(tax) + " ကျပ်  \n"+
+						"စုစုပေါင်း: " + df.format(subtotal+tax)+" ကျပ် \n"+
+						"‌ပေးထားငွေ: " + df.format(paid) + " ကျပ် \n" +
+						"အကြွေ: " + df.format(paid - (subtotal+tax))+" ကျပ်  ";
+			}
 			doc.insertString(doc.getLength(),footer, parattr);
 		}
 		catch (BadLocationException e) {

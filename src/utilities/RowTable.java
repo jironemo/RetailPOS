@@ -17,7 +17,6 @@ public class RowTable extends JTable{
 	     Map<Integer,Color> foregroundColor = new HashMap<Integer,Color>();
 	     public RowTable()
 	     {
-	    	 setSelectionBackground(Color.YELLOW);
 	     }
 
 	     @Override

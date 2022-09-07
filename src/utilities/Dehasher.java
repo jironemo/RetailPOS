@@ -23,7 +23,6 @@ public class Dehasher {
             while (hashtext.length() < 32) {
                 hashtext = "0" + hashtext;
             }
-            System.out.println(hashtext);
             return hashtext;
         } 
   
