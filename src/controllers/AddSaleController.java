@@ -16,7 +16,7 @@ public class AddSaleController {
 		
 		try {
 			System.out.println("CODE:"+item_code);
-			String query = "select product_code, product_name,unit_name,`unit_price(MMK)`,discount_percentage,product.unit_instock from product inner join product_unit where product.unit_id = product_unit.unit_id and (product_code = '"+item_code+ "' or product_name = '"+item_code+"')";
+			String query = "select product_code, product_name,unit_name,`unit_price(MMK)`,discount_percentage,product.unit_instock from product inner join product_unit where product.unit_id = product_unit.unit_id and (product_code = \""+item_code+ "\" or product_name = \""+item_code+"\")";
 			Statement s = DBConnector.getConnection().createStatement();
 			ResultSet rs = s.executeQuery(query);
 			if(rs.next()) {
@@ -41,7 +41,7 @@ public class AddSaleController {
 		t.addRow(k);
 	}
 
-	@SuppressWarnings("null")
+
 	public void processSale(JTable table) {
 		// TODO Auto-generated method stub
 		int rowCount = table.getRowCount();
@@ -53,12 +53,11 @@ public class AddSaleController {
 		s.execute("INSERT INTO invoice (payment_type,date_recorded) values (0,NOW())");
 		
 		while( i < rowCount) {
-			listofItems[i][0] = (String) table.getValueAt(i, 0);
-			listofItems[i][1] = (String) table.getValueAt(i, 4);
-
-				String format = "CALL PROCESS_SALE(GET_PRODUCT_ID('%1s'),%2s)";
+				listofItems[i][0] = table.getValueAt(i, 1).toString();
+					listofItems[i][1] = table.getValueAt(i, 4).toString();
+					System.out.println("ID:"+ listofItems[i][0]);
+				String format = "CALL PROCESS_SALE(GET_PRODUCT_ID(\"%1s\"),\"%2s\")";
 				s.execute(String.format(format,listofItems[i][0] ,listofItems[i][1]));
-				
 				i++;
 			}
 		
@@ -72,7 +71,7 @@ public class AddSaleController {
 	public int getRemainingQuantity(String code) {
 		// TODO Auto-generated method stub
 		try {
-			String query = "select product.unit_instock from product where (product_code = '"+code+"' or product_name = '"+code+"');";
+			String query = "select product.unit_instock from product where (product_code = \""+code+"\" or product_name = \""+code+"\");";
 			Statement s = DBConnector.getConnection().createStatement();
 			ResultSet rs = s.executeQuery(query);
 			rs.next();
@@ -88,7 +87,7 @@ public class AddSaleController {
 	public String[] getSuggestions(String input) {
 		String[] output = {};
 		try {
-			String query = "select product.product_name from product where product_code like '"+input+"%' or product_name like '"+input+"%';";
+			String query = "select product.product_name from product where product_code like \""+input+"%\" or product_name like \""+input+"%\";";
 			Statement s = DBConnector.getConnection().createStatement();
 			ResultSet rs = s.executeQuery(query);
 			output = new String[9];

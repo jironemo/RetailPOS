@@ -3,6 +3,7 @@ package ui;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 import java.awt.print.PrinterException;
+import java.text.DecimalFormat;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -11,6 +12,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+
+import org.apache.batik.css.engine.value.css2.FontStyleManager;
 
 import controllers.AddSaleController;
 import custom_objects.ItemList;
@@ -22,6 +25,7 @@ import javax.swing.JTextPane;
 import java.util.Date;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 
 public class ReceiptPrint extends JFrame {
@@ -63,6 +67,7 @@ public class ReceiptPrint extends JFrame {
 		receipt = new JTextPane();
 		receipt.setAutoscrolls(false);
 		receipt.setEditable(false);
+		receipt.setFont(new Font("Myanmar Text",1,12));
 	
 		scrollPane.setViewportView(receipt);
 		
@@ -140,11 +145,12 @@ public class ReceiptPrint extends JFrame {
 			StyleConstants.setBold(parattr,true);
 			StyleConstants.setFontSize(parattr, 14);
 			receipt.setParagraphAttributes( parattr,true);
-			String footer = "Subtotal: " + subtotal + "  \n" +
-							"Tax: "+tax + "  \n"+
-							"Total Payable: " + (subtotal+tax)+"  \n"+
-							"Paid Amount: " + paid + "  \n" +
-							"Change: " + (paid - (subtotal+tax))+"  ";
+			DecimalFormat df = new DecimalFormat("#.00");
+			String footer = "Subtotal: " + df.format(subtotal) + "  \n" +
+							"Tax: "+df.format(tax) + "  \n"+
+							"Total Payable: " + df.format(subtotal+tax)+"  \n"+
+							"Paid Amount: " + df.format(paid) + "  \n" +
+							"Change: " + df.format(paid - (subtotal+tax))+"  ";
 			doc.insertString(doc.getLength(),footer, parattr);
 		}
 		catch (BadLocationException e) {

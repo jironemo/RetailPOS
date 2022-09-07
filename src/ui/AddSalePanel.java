@@ -16,12 +16,12 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.DecimalFormat;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -32,11 +32,8 @@ import javax.swing.ScrollPaneConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.border.MatteBorder;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.JList;
 import javax.swing.DefaultListModel;
-import javax.swing.DropMode;
 @SuppressWarnings("serial")
 public class AddSalePanel extends JPanel {
 
@@ -68,6 +65,8 @@ public class AddSalePanel extends JPanel {
 		addTextBoxListeners();
 		instantiateButtons();
 		instantiateTable();
+		
+		System.out.println(txt_Code.getFont().getFontName());
 
 	}
 	
@@ -83,6 +82,7 @@ public class AddSalePanel extends JPanel {
 					JOptionPane.showMessageDialog(null, "Error: Paid Amount is Null");
 				}else{
 					double total_payable = subtotal + tax;
+					
 					paid = Double.parseDouble(txt_Paid.getText());
 					ItemList items = getItemList();
 					if(paid >= total_payable) {
@@ -174,11 +174,13 @@ public class AddSalePanel extends JPanel {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				codeEnter(e,2); 
-				}
+			}
 		});
 		txt_Paid.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
-				codeEnter(e,3);
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					btnPrintReceipt.getActionListeners()[0].actionPerformed(null);
+				}
 			}
 		});
 		list.addMouseListener(new MouseListener() {
@@ -192,7 +194,6 @@ public class AddSalePanel extends JPanel {
 					scrollPane_1.setVisible(false);
 					focusGrabber(1);
 					list.clearSelection();
-					//codeEnter(new KeyEvent(txt_Code, 0, 0, 0, KeyEvent.VK_TAB,'\n', 1), 1);
 				}
 			}
 
@@ -240,7 +241,6 @@ public class AddSalePanel extends JPanel {
 		list.clearSelection();
 	}
 
-	@SuppressWarnings("null")
 	protected void codeEnter(KeyEvent e, int box) {
 		// TODO Auto-generated method stub
 		
@@ -248,9 +248,13 @@ public class AddSalePanel extends JPanel {
 		int qty = 1;
 		String code = txt_Code.getText();
 		String item[] = null;
-		
+		list.setVisible(false);
+		scrollPane_1.setVisible(false);
+		list.clearSelection();
 		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-
+			if(box == 3) {
+				btnPrintReceipt.getActionListeners()[0].actionPerformed(null);
+			}
 			int remainingQuantity = asc.getRemainingQuantity(code);
 			////if the enter event occurred in txt_Qty,
 			////the qty value is set to that of txt_Qty
@@ -316,7 +320,7 @@ public class AddSalePanel extends JPanel {
 		subtotal += Double.parseDouble(price)*qty;
 		tax = subtotal * 0.02;
 		lblSubtotal.setText("Subtotal:\t"+subtotal);
-		lblTax.setText("Tax:\t"+tax);
+		lblTax.setText("Tax:\t"+new DecimalFormat("#.00").format(tax));
 	}
 
 	private void focusGrabber(int box) {
@@ -335,6 +339,8 @@ public class AddSalePanel extends JPanel {
 		// TODO Auto-generated method stub
 		for(int i = 0; i < table.getModel().getRowCount();i++) {
 			if(table.getValueAt(i,0).toString().equals(string)) {
+				return i;
+			}else if(table.getValueAt(i, 1).toString().equals(string)) {
 				return i;
 			}
 		}
@@ -371,7 +377,7 @@ public class AddSalePanel extends JPanel {
 		JTextField[] fields = {txt_Code,txt_Qty,txt_Paid};
 
 		for(JTextField field : fields) {
-			field.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			field.setFont(new Font("Myanmar Text", Font.PLAIN, 18));
 			field.setFocusTraversalKeysEnabled(false);
 			Border org_border = field.getBorder();
 			field.addFocusListener(new FocusAdapter() {
@@ -385,6 +391,7 @@ public class AddSalePanel extends JPanel {
 			});
 		}
 		
+		
 	}
 	
 	private void instantiateLabels() {
@@ -393,17 +400,17 @@ public class AddSalePanel extends JPanel {
 		scrollPane_1 = new JScrollPane();
 		scrollPane_1.setVisible(false);
 		scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane_1.setBounds(531, 56, 162, 148);
+		scrollPane_1.setBounds(531, 56, 295, 148);
 		add(scrollPane_1);
 		
 		list = new JList<String>();
 		list.setVisible(false);
 		scrollPane_1.setViewportView(list);
-		lblCode = new JLabel("Item Code\r\n");
+		lblCode = new JLabel("Scan Barcode or Enter Name\n");
 		lblCode.setForeground(new Color(248, 248, 255));
 		lblCode.setFocusable(false);
 		lblCode.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblCode.setBounds(454, 34, 64, 17);
+		lblCode.setBounds(338, 34, 180, 17);
 		add(lblCode);
 		
 		lblSubtotal = new JLabel("Subtotal:");
@@ -416,7 +423,7 @@ public class AddSalePanel extends JPanel {
 		lblDate = new JLabel("New label");
 		lblDate.setForeground(new Color(248, 248, 255));
 		lblDate.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblDate.setBounds(234, 35, 210, 17);
+		lblDate.setBounds(632, 11, 194, 17);
 		lblDate.setText(new Date().toString());
 		add(lblDate);
 		
