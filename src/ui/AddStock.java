@@ -70,12 +70,23 @@ public class AddStock extends JPanel {
 				if(k == JOptionPane.YES_OPTION) {
 					boolean success = AddStockController.addToDB(values);
 					if(success == true) {
-						((JFrame)(getParent().getParent().getParent().getParent())).dispose();
+						clearTextBoxes();
 					}
 				}
 			}	
 		});
 		setText(language);
+	}
+
+	protected void clearTextBoxes() {
+		// TODO Auto-generated method stub
+		  txtCode.setText("");
+		  txtName.setText("");
+		txtUnit.setText("");
+		txtStock.setText("");
+		txtPrice.setText("");
+		txtDiscount.setText("");
+		txtCategory.setSelectedIndex(-1);
 	}
 
 	@SuppressWarnings("unchecked")

@@ -36,7 +36,6 @@ import javax.swing.JFileChooser;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.Desktop;
 

@@ -20,12 +20,9 @@ import utilities.WindowBridge;
 
 import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.SystemColor;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
-import javax.swing.border.BevelBorder;
 public class Login extends LoginController {
 
 	private JFrame frmLogin;

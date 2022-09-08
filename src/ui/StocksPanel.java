@@ -19,19 +19,28 @@ import utilities.RowTable;
 
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.ImageIcon;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class StocksPanel extends JPanel {
 	/**
@@ -45,7 +54,7 @@ public class StocksPanel extends JPanel {
 	private JPanel panel,contentPane;
 	private JButton btnCancel,btnDeleteData,btnOk,btnAddStock,btnCheck;
 	private JScrollPane scrollPane;
-	private JTextField textField;
+	private JTextField txtSearch;
 	protected int language;
 	/**
 	 * Create the panel.
@@ -66,6 +75,22 @@ public class StocksPanel extends JPanel {
 		setText(i);
 		add(contentPane);
 		
+		JButton btnReset = new JButton("Reset");
+		btnReset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txtSearch.setText("");
+				table.setRowSorter(null);
+			}
+		});
+		btnReset.setVerticalTextPosition(SwingConstants.BOTTOM);
+		btnReset.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnReset.setForeground(Color.WHITE);
+		btnReset.setFont(new Font("Myanmar Text", Font.BOLD, 16));
+		btnReset.setBorder(null);
+		btnReset.setBackground(Color.DARK_GRAY);
+		btnReset.setBounds(476, 38, 91, 38);
+		contentPane.add(btnReset);
+		
 
 	}
 
@@ -82,14 +107,9 @@ public class StocksPanel extends JPanel {
 		
 		btnCheck.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String message = "Search Result:\n";
-				List<String> items = StocksController.checkStock(textField.getText());
-				int i = 1;
-				for(String k : items) {
-					message+= "Item"+ i +": " + k+"\n\n";
-					i++;
-				}
-				JOptionPane.showMessageDialog(null,message);
+				TableRowSorter<TableModel> sort = new TableRowSorter<TableModel>(table.getModel());
+				sort.setRowFilter(RowFilter.regexFilter(txtSearch.getText()));
+				table.setRowSorter(sort);
 			}
 		});
 		btnDeleteData.addActionListener(new ActionListener() {
@@ -232,7 +252,7 @@ public class StocksPanel extends JPanel {
 
 		btnAddStock.setForeground(new Color(255, 255, 255));
 		btnAddStock.setFont(new Font("Myanmar Text", Font.BOLD, 16));
-		btnAddStock.setBounds(10, 33, 159, 38);
+		btnAddStock.setBounds(861, 38, 159, 38);
 		contentPane.add(btnAddStock);
 		
 		btnCheck = new JButton("Check");
@@ -242,7 +262,7 @@ public class StocksPanel extends JPanel {
 		btnCheck.setForeground(new Color(255, 255, 255));
 		btnCheck.setFont(new Font("Myanmar Text", Font.BOLD, 16));
 		btnCheck.setBackground(Color.DARK_GRAY);
-		btnCheck.setBounds(951, 33, 91, 38);
+		btnCheck.setBounds(382, 38, 91, 38);
 		contentPane.add(btnCheck);
 	}
 
@@ -328,12 +348,12 @@ public class StocksPanel extends JPanel {
 		
 		lblNewLabel = new JLabel("Enter Name or Product Code to Check Stock:");
 		lblNewLabel.setVerticalAlignment(SwingConstants.TOP);
-		lblNewLabel.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel.setBackground(new Color(112, 128, 144));
 		lblNewLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
 		lblNewLabel.setForeground(new Color(47, 79, 79));
 		lblNewLabel.setFont(new Font("Myanmar Text", Font.BOLD, 14));
-		lblNewLabel.setBounds(179, 41, 397, 24);
+		lblNewLabel.setBounds(10, 11, 397, 24);
 		contentPane.add(lblNewLabel);
 	}
 
@@ -390,11 +410,20 @@ public class StocksPanel extends JPanel {
 		txtDiscount.setBounds(256, 389, 185, 42);
 		panel.add(txtDiscount);
 		
-		textField = new JTextField();
-		textField.setFont(new Font("Myanmar Text", Font.PLAIN, 12));
-		textField.setBounds(579, 34, 362, 38);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		txtSearch = new JTextField();
+		txtSearch.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				TableRowSorter<TableModel> sort = new TableRowSorter<TableModel>(table.getModel());
+				sort.setRowFilter(RowFilter.regexFilter(txtSearch.getText()));
+				table.setRowSorter(sort);
+			}
+		});
+		
+		txtSearch.setFont(new Font("Myanmar Text", Font.PLAIN, 12));
+		txtSearch.setBounds(10, 38, 362, 38);
+		contentPane.add(txtSearch);
+		txtSearch.setColumns(10);
 
 	}
 
