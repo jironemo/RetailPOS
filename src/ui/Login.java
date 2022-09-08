@@ -23,6 +23,9 @@ import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.SystemColor;
+import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
+import javax.swing.border.BevelBorder;
 public class Login extends LoginController {
 
 	private JFrame frmLogin;
@@ -57,34 +60,44 @@ public class Login extends LoginController {
 	 */
 	private void initialize() {
 		try {
-		UIManager.setLookAndFeel(UIManager.createLookAndFeel("Nimbus"));
+		UIManager.setLookAndFeel(UIManager.createLookAndFeel("Windows"));
 
 	} catch (UnsupportedLookAndFeelException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
 		frmLogin = new JFrame();
-		frmLogin.setUndecorated(true);
-		frmLogin.getContentPane().setBackground(Color.WHITE);
+		frmLogin.getContentPane().setBackground(new Color(223, 193, 120));
 		frmLogin.setTitle("Login");
 		frmLogin.setResizable(false);
 		frmLogin.setBounds(100, 100, 623, 400);
 		frmLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmLogin.getContentPane().setLayout(null);
 		
+		JLabel lblAks = new JLabel("AKS");
+		lblAks.setForeground(Color.BLACK);
+		lblAks.setFont(new Font("Arial Black", Font.PLAIN, 18));
+		lblAks.setBackground(Color.WHITE);
+		lblAks.setBounds(88, 146, 47, 33);
+		frmLogin.getContentPane().add(lblAks);
+		
 		JLabel lblNewLabel = new JLabel("Welcome to AKS POS System");
+		lblNewLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBackground(SystemColor.window);
 		lblNewLabel.setForeground(SystemColor.desktop);
 		lblNewLabel.setFont(new Font("Arial Black", Font.PLAIN, 30));
-		lblNewLabel.setBounds(73, 23, 483, 80);
+		lblNewLabel.setBounds(46, 31, 526, 55);
 		frmLogin.getContentPane().add(lblNewLabel);
 		txtUser = new JTextField();
 		txtUser.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		txtUser.setBounds(345, 144, 237, 42);
+		txtUser.setBounds(345, 150, 237, 42);
 		frmLogin.getContentPane().add(txtUser);
 		txtUser.setColumns(10);
 		
-		JButton btnNewButton = new JButton("Login");
+		JButton btnNewButton = new JButton("LOGIN");
+		btnNewButton.setBorderPainted(false);
+		btnNewButton.setBorder(new LineBorder(new Color(0, 0, 0)));
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -94,44 +107,31 @@ public class Login extends LoginController {
 			}
 		});
 	
-		btnNewButton.setForeground(SystemColor.desktop);
-		btnNewButton.setBackground(SystemColor.control);
-		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnNewButton.setBounds(470, 300, 115, 42);
+		btnNewButton.setForeground(Color.white);
+		btnNewButton.setBackground(Color.black);
+		btnNewButton.setFont(new Font("Arial Black", Font.PLAIN, 16));
+		btnNewButton.setBounds(345, 300, 237, 42);
 		frmLogin.getContentPane().add(btnNewButton);
 		
-		JButton btnCancel = new JButton("Cancel");
-		btnCancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frmLogin.dispose();
-			}
-		});
-		
-		btnCancel.setForeground(SystemColor.desktop);
-		btnCancel.setBackground(SystemColor.control);
-		btnCancel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnCancel.setBounds(345, 300, 115, 42);
-		frmLogin.getContentPane().add(btnCancel);
-		
 		JLabel lblNewLabel_1 = new JLabel("Username");
-		lblNewLabel_1.setFont(new Font("Georgia", Font.BOLD, 16));
-		lblNewLabel_1.setBounds(342, 114, 89, 33);
+		lblNewLabel_1.setFont(new Font("Arial Black", Font.BOLD, 16));
+		lblNewLabel_1.setBounds(342, 114, 101, 33);
 		frmLogin.getContentPane().add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Password");
-		lblNewLabel_1_1.setFont(new Font("Georgia", Font.BOLD, 16));
-		lblNewLabel_1_1.setBounds(345, 203, 121, 33);
+		lblNewLabel_1_1.setFont(new Font("Arial Black", Font.BOLD, 16));
+		lblNewLabel_1_1.setBounds(345, 203, 98, 33);
 		frmLogin.getContentPane().add(lblNewLabel_1_1);
 		
 		txtPass = new JPasswordField();
 		txtPass.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		txtPass.setBounds(345, 236, 237, 42);
+		txtPass.setBounds(345, 235, 237, 42);
 		frmLogin.getContentPane().add(txtPass);
 		
 		JLabel icon = new JLabel("");
 		icon.setIconTextGap(0);
-		icon.setIcon(new ImageIcon(Login.class.getResource("/resources/boy.png")));
-		icon.setBounds(45, 93, 290, 249);
+		icon.setIcon(new ImageIcon(Login.class.getResource("/resources/boy-removebg-preview.png")));
+		icon.setBounds(28, 103, 290, 249);
 		frmLogin.getContentPane().add(icon);
 	}
 }

@@ -14,6 +14,9 @@ import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Color;
+import javax.swing.border.LineBorder;
+import javax.swing.SwingConstants;
 
 public class AddStock extends JPanel {
 
@@ -28,27 +31,33 @@ public class AddStock extends JPanel {
 	private JTextField txtPrice;
 	private JTextField txtDiscount;
 	private JComboBox<String> txtCategory;
+	private JLabel lblCode,lblProductName,lblUnit,lblCategory,lblStock,lblUnitPrice,lblDiscount,lblAddStock;
 	private JLabel[] labels = null;
 	private String[] values = {"","","","","","",""};
 	/**
 	 * Create the panel.
 	 */
-	public AddStock() {
-		setSize(352,530);
+	public AddStock(int language) {
+		setSize(515,530);
 		setLayout(null);
-		
+		setBackground(new Color(255, 205, 130));
 		instantiateLabels();
 		instantiateTextBoxes();
 		
 		txtCategory = new JComboBox<String>();
-		txtCategory.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		txtCategory.setFont(new Font("Myanmar Text", Font.BOLD, 15));
 		txtCategory.setEditable(true);
-		txtCategory.setBounds(135, 227, 185, 42);
+		txtCategory.setBounds(49, 292, 185, 42);
 		Populator.setComboData(txtCategory);
 		add(txtCategory);
 		
 		JButton btnAdd = new JButton("Add Stock");
-		btnAdd.setBounds(231, 442, 89, 33);
+		btnAdd.setFont(new Font("Myanmar Text", Font.BOLD, 15));
+		btnAdd.setBorderPainted(false);
+		btnAdd.setBorder(new LineBorder(new Color(0, 0, 0)));
+		btnAdd.setBackground(Color.DARK_GRAY);
+		btnAdd.setForeground(Color.WHITE);
+		btnAdd.setBounds(242, 437, 185, 42);
 		add(btnAdd);
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -59,12 +68,14 @@ public class AddStock extends JPanel {
 				}
 				int k = JOptionPane.showConfirmDialog(null, message, "Confirm Data", JOptionPane.YES_NO_OPTION);
 				if(k == JOptionPane.YES_OPTION) {
-					AddStockController.addToDB(values);
-					((JFrame)(getParent().getParent().getParent().getParent())).dispose();
+					boolean success = AddStockController.addToDB(values);
+					if(success == true) {
+						((JFrame)(getParent().getParent().getParent().getParent())).dispose();
+					}
 				}
-			}
-
+			}	
 		});
+		setText(language);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -80,82 +91,111 @@ public class AddStock extends JPanel {
 	}
 	private void instantiateTextBoxes() {
 		txtCode = new JTextField();
-		txtCode.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		txtCode.setFont(new Font("Myanmar Text", Font.BOLD, 15));
 		txtCode.setColumns(10);
-		txtCode.setBounds(135, 71, 185, 42);
+		txtCode.setBounds(49, 128, 378, 42);
 		add(txtCode);
 		
 		txtName = new JTextField();
-		txtName.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		txtName.setFont(new Font("Myanmar Text", Font.BOLD, 15));
 		txtName.setColumns(10);
-		txtName.setBounds(135, 124, 185, 42);
+		txtName.setBounds(49, 212, 185, 42);
 		add(txtName);
 		
 		txtUnit = new JTextField();
-		txtUnit.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		txtUnit.setFont(new Font("Myanmar Text", Font.BOLD, 15));
 		txtUnit.setColumns(10);
-		txtUnit.setBounds(135, 177, 185, 42);
+		txtUnit.setBounds(242, 212, 185, 42);
 		add(txtUnit);
 		
 		txtStock = new JTextField();
-		txtStock.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		txtStock.setFont(new Font("Myanmar Text", Font.BOLD, 15));
 		txtStock.setColumns(10);
-		txtStock.setBounds(135, 280, 185, 42);
+		txtStock.setBounds(242, 292, 185, 42);
 		add(txtStock);
 		
 		txtPrice = new JTextField();
-		txtPrice.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		txtPrice.setFont(new Font("Myanmar Text", Font.BOLD, 15));
 		txtPrice.setColumns(10);
-		txtPrice.setBounds(135, 333, 185, 42);
+		txtPrice.setBounds(49, 384, 185, 42);
 		add(txtPrice);
 		
 		
 		txtDiscount = new JTextField();
-		txtDiscount.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		txtDiscount.setFont(new Font("Myanmar Text", Font.BOLD, 15));
 		txtDiscount.setColumns(10);
-		txtDiscount.setBounds(135, 388, 158, 42);
+		txtDiscount.setBounds(242, 384, 185, 42);
 		add(txtDiscount);
 		
 	}
 
 	private void instantiateLabels() {
-		JLabel lblCategory = new JLabel("Category");
-		lblCategory.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblCategory.setBounds(51, 232, 74, 33);
+		lblCategory = new JLabel("Category");
+		lblCategory.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblCategory.setFont(new Font("Myanmar Text", Font.BOLD, 15));
+		lblCategory.setBounds(49, 262, 183, 33);
 		add(lblCategory);
-		JLabel lblAddStock = new JLabel("Add Stock");
-		lblAddStock.setFont(new Font("Tahoma", Font.PLAIN, 40));
-		lblAddStock.setBounds(91, 0, 176, 60);
+		lblAddStock = new JLabel("Add Stock");
+		lblAddStock.setHorizontalTextPosition(SwingConstants.CENTER);
+		lblAddStock.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAddStock.setFont(new Font("Myanmar Text", Font.BOLD, 28));
+		lblAddStock.setBounds(49, 34, 378, 42);
 		add(lblAddStock);
 		
-		JLabel lblCode = new JLabel("Product Code");
-		lblCode.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblCode.setBounds(16, 75, 109, 33);
+		lblCode = new JLabel("Product Code");
+		lblCode.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblCode.setFont(new Font("Myanmar Text", Font.BOLD, 15));
+		lblCode.setBounds(49, 94, 378, 33);
 		add(lblCode);
-		JLabel lblProductName = new JLabel("Product Name");
-		lblProductName.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblProductName.setBounds(10, 129, 115, 33);
+		lblProductName = new JLabel("Product Name");
+		lblProductName.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblProductName.setFont(new Font("Myanmar Text", Font.BOLD, 15));
+		lblProductName.setBounds(49, 181, 183, 33);
 		add(lblProductName);
-		JLabel lblUnit = new JLabel("Unit");
-		lblUnit.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblUnit.setBounds(91, 182, 34, 33);
+		lblUnit = new JLabel("Unit");
+		lblUnit.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblUnit.setFont(new Font("Myanmar Text", Font.BOLD, 15));
+		lblUnit.setBounds(242, 181, 185, 33);
 		add(lblUnit);
-		JLabel lblStock = new JLabel("Stock");
-		lblStock.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblStock.setBounds(80, 285, 45, 33);
+		lblStock = new JLabel("Stock");
+		lblStock.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblStock.setFont(new Font("Myanmar Text", Font.BOLD, 15));
+		lblStock.setBounds(242, 262, 185, 33);
 		add(lblStock);
-		JLabel lblper = new JLabel("%");
-		lblper.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblper.setBounds(301, 393, 19, 33);
-		add(lblper);
-		JLabel lblDiscount = new JLabel("Discount");
-		lblDiscount.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblDiscount.setBounds(55, 393, 70, 33);
+		lblDiscount = new JLabel("Discount(%)");
+		lblDiscount.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblDiscount.setFont(new Font("Myanmar Text", Font.BOLD, 15));
+		lblDiscount.setBounds(242, 350, 185, 33);
 		add(lblDiscount);
-		JLabel lblUnitPrice = new JLabel("Unit Price");
-		lblUnitPrice.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblUnitPrice.setBounds(45, 338, 80, 33);
+		lblUnitPrice = new JLabel("Unit Price");
+		lblUnitPrice.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblUnitPrice.setFont(new Font("Myanmar Text", Font.BOLD, 15));
+		lblUnitPrice.setBounds(49, 350, 183, 33);
 		add(lblUnitPrice);
 		labels = new JLabel[]{lblCode,lblProductName,lblUnit,lblCategory,lblStock,lblUnitPrice,lblDiscount};
+	}
+	
+	
+	public void setText(int language) {
+		if(language == 1) {
+			lblCode.setText("ပစ္စည်းအမှတ်"); 
+			lblStock.setText("ပစ္စည်းလက်ကျန်");
+			lblProductName.setText("ပစ္စည်းအမည်");
+			lblUnitPrice.setText("တခုချင်းစျေးနှုန်း");
+			lblCategory.setText("ပစ္စည်းအမျိုးအစား");
+			lblUnit.setText("ပမာဏ");
+			lblDiscount.setText("လျှော့စျေး(%)");
+			lblAddStock.setText("ပစ္စည်းအသစ် ထည့်ရန်");
+		}else {
+			lblCode.setText("Product Code"); 
+			lblStock.setText("Stock");
+			lblProductName.setText("Product Name");
+			lblUnitPrice.setText("Price");
+			lblCategory.setText("Category");
+			lblUnit.setText("Unit");
+			lblDiscount.setText("Discount (%)");
+
+			lblAddStock.setText("Add Stock");
+		}
 	}
 }

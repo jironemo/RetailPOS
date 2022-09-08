@@ -9,7 +9,7 @@ import ui.StocksPanel;
 import utilities.DBConnector;
 
 public class AddStockController {
-	public static void addToDB(String[] values) {
+	public static boolean addToDB(String[] values) {
 		// TODO Auto-generated method stub
 		String format = "INSERT INTO `pos`.`product`"
 				+ "(`product_code`,`product_name`,`unit_id`,`category_id`,`unit_instock`,"
@@ -24,13 +24,16 @@ public class AddStockController {
 			int result = p.executeUpdate();
 			if(result == 1) {
 				JOptionPane.showMessageDialog(null, "Insert successful", "Successful", JOptionPane.INFORMATION_MESSAGE);
-
 				StocksPanel.table.setModel(StocksController.getData(StocksPanel.table));
+				return true;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			JOptionPane.showMessageDialog(null,"Error when inserting.\n Possible Error: Product Code already exists.\n Please Check your data carefully","Error",JOptionPane.ERROR_MESSAGE);
+			return false;
 		}
+		return false;
 	}
 
 }

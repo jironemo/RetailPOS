@@ -8,6 +8,8 @@ import javax.swing.table.TableModel;
 
 import controllers.AddSaleController;
 import custom_objects.ItemList;
+
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -51,10 +53,13 @@ public class AddSalePanel extends JPanel {
 	private JList<String> list;
 	private JScrollPane scrollPane_1;
 	private int language;
+	private JPanel panel;
+	private JPanel panel_1;
 	/**
 	 * Create the frame.
 	 */
 	public AddSalePanel(int language) {
+		setOpaque(false);
 		setSize(1050, 596);
 		setFocusTraversalKeysEnabled(false);
 		setFocusTraversalPolicyProvider(true);
@@ -97,10 +102,11 @@ public class AddSalePanel extends JPanel {
 	private void instantiateButtons() {
 
 		btnPrintReceipt = new JButton("Print Receipt");
-		btnPrintReceipt.setFont(new Font("Myanmar Text", Font.PLAIN, 15));
-		btnPrintReceipt.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		btnPrintReceipt.setBackground(SystemColor.control);
-		btnPrintReceipt.setForeground(SystemColor.controlText);
+		btnPrintReceipt.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnPrintReceipt.setFont(new Font("Myanmar Text", Font.BOLD, 15));
+		btnPrintReceipt.setBorder(null);
+		btnPrintReceipt.setBackground(Color.BLACK);
+		btnPrintReceipt.setForeground(Color.WHITE);
 		btnPrintReceipt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(txt_Paid.getText().isBlank()) {
@@ -119,7 +125,7 @@ public class AddSalePanel extends JPanel {
 				}
 			}
 		});
-		btnPrintReceipt.setBounds(685, 549, 141, 36);
+		btnPrintReceipt.setBounds(685, 557, 141, 36);
 		add(btnPrintReceipt);
 		
 	}
@@ -127,12 +133,15 @@ public class AddSalePanel extends JPanel {
 	private void instantiateTable() {
 		instatiateScrollPane();
 		table = new JTable();
+		table.setForeground(Color.BLACK);
+		table.setSelectionBackground(Color.GRAY);
+		table.setOpaque(false);
 		table.setDoubleBuffered(true);
 		table.setShowVerticalLines(false);
 		table.setShowHorizontalLines(false);
-		table.setSelectionForeground(new Color(252, 225, 59));
-		table.setGridColor(new Color(102, 204, 255));
-		table.setBackground(new Color(252, 225, 59));
+		table.setSelectionForeground(Color.WHITE);
+		table.setGridColor(Color.WHITE);
+		table.setBackground(Color.LIGHT_GRAY);
 		table.setFillsViewportHeight(true);
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
@@ -162,22 +171,36 @@ public class AddSalePanel extends JPanel {
 		scrollPane.setViewportView(table);
 		
 		subtotal_text = new JLabel();
-		subtotal_text.setHorizontalAlignment(SwingConstants.TRAILING);
+		subtotal_text.setHorizontalTextPosition(SwingConstants.LEFT);
+		subtotal_text.setVerticalAlignment(SwingConstants.BOTTOM);
+		subtotal_text.setHorizontalAlignment(SwingConstants.LEFT);
 		subtotal_text.setText("Subtotal:");
 		subtotal_text.setForeground(Color.BLACK);
-		subtotal_text.setFont(new Font("Myanmar Text", Font.PLAIN, 15));
+		subtotal_text.setFont(new Font("Myanmar Text", Font.BOLD, 15));
 		subtotal_text.setFocusable(false);
-		subtotal_text.setBounds(205, 516, 181, 37);
+		subtotal_text.setBounds(20, 361, 181, 37);
 		add(subtotal_text);
 		
 		tax_text = new JLabel();
+		tax_text.setHorizontalTextPosition(SwingConstants.LEFT);
+		tax_text.setVerticalAlignment(SwingConstants.BOTTOM);
 		tax_text.setText("Tax:");
-		tax_text.setHorizontalAlignment(SwingConstants.TRAILING);
+		tax_text.setHorizontalAlignment(SwingConstants.LEFT);
 		tax_text.setForeground(Color.BLACK);
-		tax_text.setFont(new Font("Myanmar Text", Font.PLAIN, 15));
+		tax_text.setFont(new Font("Myanmar Text", Font.BOLD, 15));
 		tax_text.setFocusable(false);
-		tax_text.setBounds(205, 557, 181, 36);
+		tax_text.setBounds(20, 433, 181, 36);
 		add(tax_text);
+		
+		panel = new JPanel();
+		panel.setBackground(Color.ORANGE);
+		panel.setBounds(8, 361, 2, 62);
+		add(panel);
+		
+		panel_1 = new JPanel();
+		panel_1.setBackground(Color.ORANGE);
+		panel_1.setBounds(8, 433, 2, 62);
+		add(panel_1);
 		
 		
 		table.addKeyListener(new KeyAdapter() {
@@ -412,17 +435,17 @@ public class AddSalePanel extends JPanel {
 		txt_Code.setFont(new Font("Myanmar Text", Font.PLAIN, 15));
 		txt_Code.setForeground(SystemColor.windowText);
 		txt_Code.setBorder(new LineBorder(new Color(171, 173, 179), 1, true));
-		txt_Code.setBounds(481, 28, 162, 28);
+		txt_Code.setBounds(10, 133, 214, 42);
 		add(txt_Code);
 		txt_Qty = new JTextField();
 		txt_Qty.setForeground(SystemColor.windowText);
 		txt_Qty.setBorder(new LineBorder(new Color(171, 173, 179), 1, true));
-		txt_Qty.setBounds(767, 28, 59, 28);
+		txt_Qty.setBounds(10, 222, 214, 42);
 		add(txt_Qty);
 		txt_Paid = new JTextField();
 		txt_Paid.setForeground(SystemColor.windowText);
 		txt_Paid.setBorder(new LineBorder(new Color(171, 173, 179), 1, true));
-		txt_Paid.setBounds(685, 520, 141, 28);
+		txt_Paid.setBounds(10, 308, 214, 42);
 		add(txt_Paid);
 		JTextField[] fields = {txt_Code,txt_Qty,txt_Paid};
 
@@ -448,7 +471,7 @@ public class AddSalePanel extends JPanel {
 		setLayout(null);
 		
 		scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(481, 56, 286, 152);
+		scrollPane_1.setBounds(10, 175, 286, 152);
 		scrollPane_1.setVisible(false);
 		add(scrollPane_1);
 		
@@ -459,48 +482,69 @@ public class AddSalePanel extends JPanel {
 		
 		
 		lblCode = new JLabel("Scan Barcode or Enter Name\n");
-		lblCode.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblCode.setHorizontalTextPosition(SwingConstants.LEFT);
+		lblCode.setHorizontalAlignment(SwingConstants.LEFT);
 		lblCode.setForeground(SystemColor.windowText);
 		lblCode.setFocusable(false);
 		lblCode.setFont(new Font("Myanmar Text", Font.PLAIN, 15));
-		lblCode.setBounds(180, 28, 291, 28);
+		lblCode.setBounds(10, 107, 291, 28);
 		add(lblCode);
 		
 		lblSubtotal = new JLabel();
 		lblSubtotal.setForeground(SystemColor.windowText);
 		lblSubtotal.setFocusable(false);
-		lblSubtotal.setFont(new Font("Myanmar Text", Font.PLAIN, 15));
-		lblSubtotal.setBounds(395, 523, 181, 22);
+		lblSubtotal.setFont(new Font("Myanmar Text", Font.PLAIN, 20));
+		lblSubtotal.setBounds(20, 394, 181, 42);
 		add(lblSubtotal);
 		
 		lblDate = new JLabel("New label");
 		lblDate.setForeground(SystemColor.windowText);
-		lblDate.setFont(new Font("Myanmar Text", Font.PLAIN, 12));
-		lblDate.setBounds(654, 2, 172, 22);
-		lblDate.setText(new Date().toString());
+		lblDate.setFont(new Font("Myanmar Text", Font.BOLD, 20));
+		lblDate.setBounds(10, 11, 266, 85);
+		Calendar c = Calendar.getInstance();
+		
+		
+		String[] days_of_week = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
+		String[] months_of_year = {"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
+		String[] am_pm = {"AM","PM"};
+		int day_of_week_int = c.get(Calendar.DAY_OF_WEEK);
+		int month_of_year_int = c.get(Calendar.MONTH);
+		
+		String day_of_week = days_of_week[day_of_week_int];
+		String month_of_year = months_of_year[month_of_year_int];
+		String second = "";
+		if(c.get(Calendar.SECOND) < 10) {
+			second = "0"+c.get(Calendar.SECOND);
+		}else second = Integer.toString(c.get(Calendar.SECOND));
+		String year = Integer.toString(c.get(Calendar.YEAR));
+		String time = c.get(Calendar.HOUR) + ":" + c.get(Calendar.MINUTE)+":"+second+am_pm[c.get(Calendar.AM_PM)];
+		String date = day_of_week +" "+ month_of_year +" "+c.get(Calendar.DAY_OF_MONTH)+" "+ year;
+		lblDate.setText("<html>"+date+"<br/>"+time+"</html>");
 		add(lblDate);
 		
 		lblTax = new JLabel();
 		lblTax.setForeground(SystemColor.windowText);
 		lblTax.setFocusable(false);
-		lblTax.setFont(new Font("Myanmar Text", Font.PLAIN, 15));
-		lblTax.setBounds(395, 565, 181, 20);
+		lblTax.setFont(new Font("Myanmar Text", Font.PLAIN, 20));
+		lblTax.setBounds(20, 468, 181, 42);
 		add(lblTax);
 		
 		lblQty = new JLabel("Qty");
+		lblQty.setHorizontalTextPosition(SwingConstants.LEFT);
 		lblQty.setVerticalAlignment(SwingConstants.TOP);
-		lblQty.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblQty.setHorizontalAlignment(SwingConstants.LEFT);
 		lblQty.setForeground(SystemColor.windowText);
 		lblQty.setFocusable(false);
 		lblQty.setFont(new Font("Myanmar Text", Font.PLAIN, 15));
-		lblQty.setBounds(654, 28, 102, 28);
+		lblQty.setBounds(10, 194, 102, 28);
 		add(lblQty);
 		
 		lblPaid = new JLabel("Paid Amount:");
-		lblPaid.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblPaid.setHorizontalTextPosition(SwingConstants.LEFT);
+		lblPaid.setHorizontalAlignment(SwingConstants.LEFT);
 		lblPaid.setForeground(SystemColor.windowText);
 		lblPaid.setFont(new Font("Myanmar Text", Font.PLAIN, 15));
-		lblPaid.setBounds(531, 521, 148, 27);
+		lblPaid.setBounds(10, 275, 148, 27);
 		add(lblPaid);
 	}
 

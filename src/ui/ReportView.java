@@ -41,6 +41,8 @@ import java.awt.Color;
 import java.awt.Desktop;
 
 import javax.swing.border.EmptyBorder;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 
 public class ReportView extends JPanel {
 
@@ -50,10 +52,13 @@ public class ReportView extends JPanel {
 	private static final long serialVersionUID = 6606094668711452282L;
 	private JDateChooser chooserFirstDate,chooserLastDate;
 	RowTable table = new RowTable();
+	private JTextField txtInvoice;
+	JTabbedPane tabbedPane;
 	/**
 	 * Create the panel.
 	 */
 	public ReportView() {
+		setOpaque(false);
 		setSize(1050, 596);
 		setLayout(null);
 		
@@ -68,27 +73,17 @@ public class ReportView extends JPanel {
 		table.setShowVerticalLines(false);
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
+				{null, null, null, null, null},
 			},
 			new String[] {
 				"Invoice No.", "Product Code", "Product Name", "Quantity", "Date"
 			}
-		) {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-			boolean[] columnEditables = new boolean[] {
-				false, false, false, false, false
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		});
+		));
 		table.getColumnModel().getColumn(0).setResizable(false);
 		table.getColumnModel().getColumn(0).setPreferredWidth(84);
-		table.getColumnModel().getColumn(1).setPreferredWidth(190);
-		table.getColumnModel().getColumn(2).setPreferredWidth(207);
-		table.getColumnModel().getColumn(3).setPreferredWidth(86);
+		table.getColumnModel().getColumn(1).setPreferredWidth(143);
+		table.getColumnModel().getColumn(2).setPreferredWidth(275);
+		table.getColumnModel().getColumn(3).setPreferredWidth(58);
 		table.getColumnModel().getColumn(4).setPreferredWidth(85);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setRowHeight(20);
@@ -98,25 +93,52 @@ public class ReportView extends JPanel {
 		populateReport();
 		
 		scrollPane.setViewportView(table);
-		
-		JLabel lblNewLabel = new JLabel("From");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel.setBounds(327, 42, 98, 25);
-		add(lblNewLabel);
 
-		chooserFirstDate = new JDateChooser();
-		chooserFirstDate.getCalendarButton().setLocation(94, 23);
-		chooserFirstDate.setBounds(366, 37, 127, 35);
-		add(chooserFirstDate);
-		chooserLastDate = new JDateChooser();
+		
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+		tabbedPane.setBounds(10, 82, 230, 225);
+		add(tabbedPane);
+		JPanel panel = new JPanel();
+		panel.setOpaque(false);
+		tabbedPane.addTab("Filter By Date", null, panel, "Filter Sales by Date");
+		tabbedPane.setEnabledAt(0, true);
+		tabbedPane.setBackground(new Color(255, 205, 130));
+		panel.setLayout(null);
 		try {
 			SimpleDateFormat df =new SimpleDateFormat("yyyy-MM-dd");
+			JLabel lblNewLabel = new JLabel("From");
+			lblNewLabel.setBounds(15, 42, 98, 25);
+			panel.add(lblNewLabel);
+			lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			chooserFirstDate = new JDateChooser();
+			chooserFirstDate.setBounds(15, 65, 200, 35);
+			panel.add(chooserFirstDate);
+			chooserFirstDate.getCalendarButton().setLocation(94, 23);
 			chooserFirstDate.setDate(df.parse(table.getValueAt(0, 4).toString()));
+			
+			JLabel lblTo = new JLabel("To");
+			lblTo.setBounds(15, 111, 98, 25);
+			panel.add(lblTo);
+			lblTo.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			chooserLastDate = new JDateChooser();
+			chooserLastDate.setBounds(15, 137, 200, 35);
+			panel.add(chooserLastDate);
 			chooserLastDate.setDate(df.parse(df.format(new Date())));
 		} catch (ParseException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
+		
+
+		
+		
+		
+		
+		JLabel lblSelectFirstDate = new JLabel("Select Date");
+		lblSelectFirstDate.setBounds(74, 11, 98, 25);
+		panel.add(lblSelectFirstDate);
+		lblSelectFirstDate.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
 		chooserLastDate.getDateEditor().addPropertyChangeListener("date",new PropertyChangeListener() {
 			@Override
@@ -162,32 +184,85 @@ public class ReportView extends JPanel {
 				}
 			}
 		});
-		chooserLastDate.setBounds(526, 37, 127, 35);
-		add(chooserLastDate);
 		
-		JLabel lblSelectFirstDate = new JLabel("Select Date");
-		lblSelectFirstDate.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblSelectFirstDate.setBounds(245, 42, 98, 25);
-		add(lblSelectFirstDate);
+		JPanel panel_1 = new JPanel();
+		panel_1.setOpaque(false);
+		tabbedPane.addTab("Filter By Invoice", null, panel_1, null);
+		tabbedPane.setEnabledAt(1, true);
+		panel_1.setLayout(null);
 		
-		JLabel lblTo = new JLabel("To");
-		lblTo.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblTo.setBounds(503, 42, 98, 25);
-		add(lblTo);
+		txtInvoice = new JTextField();
+		txtInvoice.setBounds(10, 61, 205, 38);
+		panel_1.add(txtInvoice);
+		txtInvoice.setColumns(10);
 		
-		JButton btnNewButton = new JButton("Generate Report");
-		btnNewButton.setBorder(new LineBorder(new Color(0, 0, 0)));
+		JLabel lblEnterInvoiceNumber = new JLabel("Enter Invoice Number");
+		lblEnterInvoiceNumber.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblEnterInvoiceNumber.setBounds(10, 32, 205, 25);
+		panel_1.add(lblEnterInvoiceNumber);
+		
+		JButton btnFilter = new JButton("Filter");
+		btnFilter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(txtInvoice.getText().isEmpty() == true) {
+					JOptionPane.showMessageDialog(null, "Please enter an invoice number!");
+					
+				}else {
+					
+					// TODO Auto-generated method stub
+						int invoice = Integer.parseInt(txtInvoice.getText());
+						getData(invoice);
+				}
+			}
+		});
+		btnFilter.setForeground(Color.WHITE);
+		btnFilter.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnFilter.setBorder(null);
+		btnFilter.setBackground(Color.BLACK);
+		btnFilter.setBounds(10, 151, 205, 35);
+		panel_1.add(btnFilter);
+		
+		JButton btnNewButton = new JButton("Export Spreadsheet");
+		btnNewButton.setBounds(10, 318, 225, 35);
+		add(btnNewButton);
+		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnNewButton.setForeground(Color.WHITE);
+		btnNewButton.setBackground(Color.DARK_GRAY);
+		btnNewButton.setBorder(null);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				createWorkbook();
 			}
 		});
-		btnNewButton.setBounds(713, 36, 200, 35);
-		add(btnNewButton);
 		
 		
 		
 
+	}
+	protected void getData(int invoice) {
+		// TODO Auto-generated method stub
+		Statement s = null;
+		ResultSet rs = null;
+		DefaultTableModel d = (DefaultTableModel)table.getModel();
+		d.setRowCount(0);
+		try {
+			s = DBConnector.getConnection().createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String query = String.format("CALL GET_SALES_BY_INVOICE('%1s')",invoice);
+		try {
+			rs = s.executeQuery(query);
+			while(rs.next()) {
+				Object[] result = {rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5)};
+				d.addRow(result);
+			}
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	protected void getData(String firstdate, String lastdate) {
 		// TODO Auto-generated method stub
@@ -205,8 +280,8 @@ public class ReportView extends JPanel {
 		try {
 			rs = s.executeQuery(query);
 			while(rs.next()) {
-				Object[] k = {rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5)};
-				d.addRow(k);
+				Object[] result = {rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5)};
+				d.addRow(result);
 			}
 			
 		} catch (SQLException e1) {
@@ -215,6 +290,8 @@ public class ReportView extends JPanel {
 		}
 	}
 	protected void createWorkbook() {
+		String ext = null;
+		
 		// TODO Auto-generated method stub
 		  try (XSSFWorkbook workbook = new XSSFWorkbook()) {
 			  Sheet sheet = workbook.createSheet();
@@ -241,11 +318,16 @@ public class ReportView extends JPanel {
 			  }
 				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.setFileSelectionMode(JFileChooser.SAVE_DIALOG);
+				File f;
 				if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-					String from = format.format(chooserFirstDate.getDate());
-					String to = format.format(chooserLastDate.getDate());
-					File f = new File(fileChooser.getSelectedFile()+"/"+from+" to "+to+".xlsx");
+					if(tabbedPane.getSelectedIndex() == 0) {
+						SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+						String from = format.format(chooserFirstDate.getDate());
+						String to = format.format(chooserLastDate.getDate());
+						f = new File(fileChooser.getSelectedFile()+"/"+from+" to "+to+ext);
+					}else {
+						f = new File(fileChooser.getSelectedFile()+"/"+"Invoice#"+txtInvoice.getText()+ext);
+					}
 					f.createNewFile();
 					
 					workbook.write(new FileOutputStream(f));
@@ -264,7 +346,7 @@ public class ReportView extends JPanel {
 			ResultSet rs = s.executeQuery("CALL GET_SALES()");
 			d.setRowCount(0);
 			while(rs.next()) {
-				Object[] result = {rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5)};
+				Object[] result = {rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5)};
 				d.addRow(result);
 			}
 		} catch (SQLException e) {

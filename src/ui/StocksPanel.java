@@ -27,12 +27,11 @@ import java.awt.event.ActionEvent;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.border.MatteBorder;
+import javax.swing.ImageIcon;
 
 public class StocksPanel extends JPanel {
 	/**
@@ -47,6 +46,7 @@ public class StocksPanel extends JPanel {
 	private JButton btnCancel,btnDeleteData,btnOk,btnAddStock,btnCheck;
 	private JScrollPane scrollPane;
 	private JTextField textField;
+	protected int language;
 	/**
 	 * Create the panel.
 	 * @param i 
@@ -54,7 +54,7 @@ public class StocksPanel extends JPanel {
 	public StocksPanel(int i) {
 		setLayout(null);
 		setSize(1050,596);
-		
+		this.language = i;
 		
 		instantiateContentPane();
 		instantiatePanel();
@@ -117,10 +117,12 @@ public class StocksPanel extends JPanel {
 		btnAddStock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFrame wrapper = new JFrame();
-				wrapper.getContentPane().add(new AddStock());
-				wrapper.setSize(360,540);
+				AddStock as = new AddStock(language);
+				wrapper.getContentPane().add(as);
+				wrapper.setSize(as.getSize());
 				wrapper.setVisible(true);
 				wrapper.setLocationRelativeTo(null);
+				wrapper.setBackground(getBackground());
 			}
 		});
 		
@@ -130,12 +132,13 @@ public class StocksPanel extends JPanel {
 		contentPane = new JPanel();
 		contentPane.setBounds(0, 0, 1050, 596);
 		contentPane.setPreferredSize(new Dimension(1050, 596));
-		contentPane.setBackground(new Color(255, 255, 59));
+		contentPane.setBackground(new Color(255, 205, 130));
 		contentPane.setLayout(null);
 	}
 
 	private void instantiatePanel() {
 		panel = new JPanel();
+		panel.setOpaque(false);
 		panel.setBackground(new Color(255, 255, 59));
 		panel.setBounds(579, 83, 463, 502);
 		panel.setLayout(null);
@@ -147,7 +150,7 @@ public class StocksPanel extends JPanel {
 		scrollPane = new JScrollPane();
 		scrollPane.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		scrollPane.setViewportBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-		scrollPane.setBackground(new Color(102, 255, 153));
+		scrollPane.setBackground(new Color(255, 205, 130));
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.setBounds(10, 83, 557, 502);
 		
@@ -159,16 +162,16 @@ public class StocksPanel extends JPanel {
 		instantiateScrollPane();
 
 		table = new RowTable();
-		table.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		table.setOpaque(false);
 		table.setDoubleBuffered(true);
 		table.setForeground(new Color(0, 0, 0));
-		table.setGridColor(new Color(255, 255, 204));
+		table.setGridColor(Color.WHITE);
 		table.setShowVerticalLines(true);
 		table.setShowHorizontalLines(true);
 		table.setSelectionMode(table.getSelectionModel().SINGLE_SELECTION);
 		DefaultTableModel d = StocksController.getData(table);
 		table.setModel(d);
-		table.setBackground(new Color(255, 255, 59));
+		table.setBackground(new Color(255, 205, 130));
 		table.setSelectionBackground(new Color(0, 204, 204));
 		table.setSelectionForeground(new Color(252, 225, 59));
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
@@ -182,55 +185,64 @@ public class StocksPanel extends JPanel {
 	}
 
 	private void instantiateButtons() {
-		btnCancel = new JButton("Cancel");
-		btnCancel.setVerticalAlignment(SwingConstants.TOP);
+		btnCancel = new JButton("Clear");
+		btnCancel.setBorder(null);
+		btnCancel.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnCancel.setVerticalTextPosition(SwingConstants.TOP);
 		
 		btnCancel.setForeground(new Color(255, 255, 255));
 		btnCancel.setFont(new Font("Myanmar Text", Font.BOLD, 16));
-		btnCancel.setBackground(new Color(112, 128, 144));
-		btnCancel.setBounds(99, 432, 89, 36);
+		btnCancel.setBackground(new Color(204, 0, 51));
+		btnCancel.setBounds(352, 85, 89, 36);
 		panel.add(btnCancel);
 		
 		btnOk = new JButton("OK");
-		btnOk.setVerticalAlignment(SwingConstants.TOP);
+		btnOk.setBorder(null);
+		btnOk.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnOk.setVerticalTextPosition(SwingConstants.TOP);
 		
 		btnOk.setForeground(new Color(255, 255, 255));
 		btnOk.setFont(new Font("Myanmar Text", Font.BOLD, 16));
-		btnOk.setBackground(new Color(0, 204, 0));
-		btnOk.setBounds(294, 431, 89, 38);
+		btnOk.setBackground(Color.DARK_GRAY);
+		btnOk.setBounds(61, 453, 185, 38);
 		panel.add(btnOk);
 		
 		
-		btnDeleteData = new JButton("Delete");
-		btnDeleteData.setVerticalAlignment(SwingConstants.TOP);
+		btnDeleteData = new JButton("DELETE");
+		btnDeleteData.setBorder(null);
+		btnDeleteData.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnDeleteData.setVerticalTextPosition(SwingConstants.TOP);
 		btnDeleteData.setForeground(new Color(255, 255, 255));
 		btnDeleteData.setFont(new Font("Myanmar Text", Font.BOLD, 16));
 		btnDeleteData.setBackground(new Color(204, 51, 0));
-		btnDeleteData.setBounds(193, 432, 101, 37);
+		btnDeleteData.setBounds(256, 454, 185, 37);
 		panel.add(btnDeleteData);
+		
+		JLabel lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setIcon(new ImageIcon(StocksPanel.class.getResource("/resources/rsz_1photo_2022-09-08_10-21-32-removebg-preview.png")));
+		lblNewLabel_1.setBounds(41, 0, 100, 100);
+		panel.add(lblNewLabel_1);
 		
 		btnAddStock = new JButton("Add New Product");
 		btnAddStock.setVerticalAlignment(SwingConstants.BOTTOM);
 		btnAddStock.setVerticalTextPosition(SwingConstants.TOP);
-		btnAddStock.setBackground(new Color(0,204,0));
+		btnAddStock.setBackground(Color.DARK_GRAY);
 		btnAddStock.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnAddStock.setBorder(new EmptyBorder(0, 0, 0, 0));
+		btnAddStock.setBorder(null);
 
 		btnAddStock.setForeground(new Color(255, 255, 255));
 		btnAddStock.setFont(new Font("Myanmar Text", Font.BOLD, 16));
-		btnAddStock.setBounds(786, 31, 184, 38);
+		btnAddStock.setBounds(10, 33, 159, 38);
 		contentPane.add(btnAddStock);
 		
 		btnCheck = new JButton("Check");
-		btnCheck.setVerticalAlignment(SwingConstants.TOP);
-		btnCheck.setVerticalTextPosition(SwingConstants.TOP);
+		btnCheck.setBorder(null);
+		btnCheck.setVerticalAlignment(SwingConstants.BOTTOM);
+		btnCheck.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btnCheck.setForeground(new Color(255, 255, 255));
 		btnCheck.setFont(new Font("Myanmar Text", Font.BOLD, 16));
-		btnCheck.setBackground(new Color(51, 204, 255));
-		btnCheck.setBounds(658, 33, 91, 38);
+		btnCheck.setBackground(Color.DARK_GRAY);
+		btnCheck.setBounds(951, 33, 91, 38);
 		contentPane.add(btnCheck);
 	}
 
@@ -242,79 +254,86 @@ public class StocksPanel extends JPanel {
 		lblEditStockDetails.setForeground(new Color(47, 79, 79));
 		lblEditStockDetails.setHorizontalAlignment(SwingConstants.CENTER);
 		lblEditStockDetails.setFont(new Font("Myanmar Text", Font.BOLD, 30));
-		lblEditStockDetails.setBounds(61, 16, 396, 46);
+		lblEditStockDetails.setBounds(131, 27, 275, 60);
 		panel.add(lblEditStockDetails);
 		
 		lblCode = new JLabel("Product Code");
+		lblCode.setHorizontalTextPosition(SwingConstants.LEFT);
 		lblCode.setBackground(new Color(112, 128, 144));
 		lblCode.setForeground(new Color(47, 79, 79));
-		lblCode.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblCode.setHorizontalAlignment(SwingConstants.LEFT);
 		lblCode.setFont(new Font("Myanmar Text", Font.BOLD, 16));
-		lblCode.setBounds(23, 76, 165, 33);
+		lblCode.setBounds(61, 189, 165, 33);
 		panel.add(lblCode);
 		
 		lblProductName = new JLabel("Product Name");
+		lblProductName.setHorizontalTextPosition(SwingConstants.LEFT);
 		lblProductName.setBackground(new Color(112, 128, 144));
 		lblProductName.setForeground(new Color(47, 79, 79));
-		lblProductName.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblProductName.setHorizontalAlignment(SwingConstants.LEFT);
 		lblProductName.setFont(new Font("Myanmar Text", Font.BOLD, 16));
-		lblProductName.setBounds(17, 125, 171, 33);
+		lblProductName.setBounds(61, 102, 171, 33);
 		panel.add(lblProductName);
 		
 		lblCategory = new JLabel("Category");
+		lblCategory.setVerticalTextPosition(SwingConstants.BOTTOM);
+		lblCategory.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblCategory.setHorizontalTextPosition(SwingConstants.LEFT);
 		lblCategory.setBackground(new Color(112, 128, 144));
 		lblCategory.setForeground(new Color(47, 79, 79));
-		lblCategory.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblCategory.setHorizontalAlignment(SwingConstants.LEFT);
 		lblCategory.setFont(new Font("Myanmar Text", Font.BOLD, 16));
-		lblCategory.setBounds(44, 228, 144, 33);
+		lblCategory.setBounds(61, 281, 144, 33);
 		panel.add(lblCategory);
 		
 		lblStock = new JLabel("Stock");
+		lblStock.setHorizontalTextPosition(SwingConstants.LEFT);
+		lblStock.setVerticalTextPosition(SwingConstants.BOTTOM);
+		lblStock.setVerticalAlignment(SwingConstants.BOTTOM);
 		lblStock.setBackground(new Color(112, 128, 144));
 		lblStock.setForeground(new Color(47, 79, 79));
-		lblStock.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblStock.setHorizontalAlignment(SwingConstants.LEFT);
 		lblStock.setFont(new Font("Myanmar Text", Font.BOLD, 16));
-		lblStock.setBounds(44, 281, 144, 33);
+		lblStock.setBounds(256, 281, 144, 33);
 		panel.add(lblStock);
 		
 		lblUnitPrice = new JLabel("Unit Price");
+		lblUnitPrice.setHorizontalTextPosition(SwingConstants.LEFT);
 		lblUnitPrice.setBackground(new Color(112, 128, 144));
 		lblUnitPrice.setForeground(new Color(47, 79, 79));
-		lblUnitPrice.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblUnitPrice.setHorizontalAlignment(SwingConstants.LEFT);
 		lblUnitPrice.setFont(new Font("Myanmar Text", Font.BOLD, 16));
-		lblUnitPrice.setBounds(61, 334, 127, 33);
+		lblUnitPrice.setBounds(61, 358, 127, 33);
 		panel.add(lblUnitPrice);
-		
-		JLabel lblper = new JLabel("%");
-		lblper.setForeground(new Color(0, 153, 0));
-		lblper.setFont(new Font("Myanmar Text", Font.BOLD, 16));
-		lblper.setBounds(364, 386, 19, 33);
-		panel.add(lblper);
 	
 		lblUnit = new JLabel("Unit");
+		lblUnit.setVerticalTextPosition(SwingConstants.BOTTOM);
+		lblUnit.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblUnit.setHorizontalTextPosition(SwingConstants.LEFT);
 		lblUnit.setBackground(new Color(112, 128, 144));
 		lblUnit.setForeground(new Color(47, 79, 79));
-		lblUnit.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblUnit.setHorizontalAlignment(SwingConstants.LEFT);
 		lblUnit.setFont(new Font("Myanmar Text", Font.BOLD, 16));
-		lblUnit.setBounds(108, 178, 80, 33);
+		lblUnit.setBounds(256, 189, 80, 33);
 		panel.add(lblUnit);
 
-		lblDiscount = new JLabel("Discount");
+		lblDiscount = new JLabel("Discount (%)");
+		lblDiscount.setHorizontalTextPosition(SwingConstants.LEFT);
 		lblDiscount.setBackground(new Color(112, 128, 144));
 		lblDiscount.setForeground(new Color(47, 79, 79));
-		lblDiscount.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblDiscount.setHorizontalAlignment(SwingConstants.LEFT);
 		lblDiscount.setFont(new Font("Myanmar Text", Font.BOLD, 16));
-		lblDiscount.setBounds(108, 386, 80, 33);
+		lblDiscount.setBounds(256, 358, 106, 33);
 		panel.add(lblDiscount);
 		
 		lblNewLabel = new JLabel("Enter Name or Product Code to Check Stock:");
+		lblNewLabel.setVerticalAlignment(SwingConstants.TOP);
 		lblNewLabel.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblNewLabel.setBackground(new Color(112, 128, 144));
-		lblNewLabel.setVerticalAlignment(SwingConstants.TOP);
 		lblNewLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
 		lblNewLabel.setForeground(new Color(47, 79, 79));
 		lblNewLabel.setFont(new Font("Myanmar Text", Font.BOLD, 14));
-		lblNewLabel.setBounds(10, 39, 300, 24);
+		lblNewLabel.setBounds(179, 41, 397, 24);
 		contentPane.add(lblNewLabel);
 	}
 
@@ -323,21 +342,21 @@ public class StocksPanel extends JPanel {
 		txtCode.setForeground(new Color(0, 0, 0));
 		txtCode.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtCode.setColumns(10);
-		txtCode.setBounds(198, 64, 185, 42);
+		txtCode.setBounds(61, 217, 185, 42);
 		panel.add(txtCode);
 		
 		txtUnit = new JTextField();
 		txtUnit.setForeground(new Color(0, 0, 0));
 		txtUnit.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtUnit.setColumns(10);
-		txtUnit.setBounds(198, 170, 185, 42);
+		txtUnit.setBounds(256, 217, 185, 42);
 		panel.add(txtUnit);
 
 		txtName = new JTextField();
 		txtName.setForeground(new Color(0, 0, 0));
 		txtName.setFont(new Font("Myanmar Text", Font.PLAIN, 15));
 		txtName.setColumns(10);
-		txtName.setBounds(198, 117, 185, 42);
+		txtName.setBounds(63, 130, 378, 42);
 		panel.add(txtName);
 		
 		txtCategory = new JComboBox<String>();
@@ -346,7 +365,7 @@ public class StocksPanel extends JPanel {
 		txtCategory.setOpaque(false);
 		txtCategory.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtCategory.setEditable(true);
-		txtCategory.setBounds(198, 220, 185, 42);
+		txtCategory.setBounds(61, 312, 185, 42);
 		Populator.setComboData(txtCategory);
 		panel.add(txtCategory);
 		
@@ -354,26 +373,26 @@ public class StocksPanel extends JPanel {
 		txtStock.setForeground(new Color(0, 0, 0));
 		txtStock.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtStock.setColumns(10);
-		txtStock.setBounds(198, 273, 185, 42);
+		txtStock.setBounds(256, 312, 185, 42);
 		panel.add(txtStock);
 
 		txtPrice = new JTextField();
 		txtPrice.setForeground(new Color(0, 0, 0));
 		txtPrice.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtPrice.setColumns(10);
-		txtPrice.setBounds(198, 326, 185, 42);
+		txtPrice.setBounds(61, 389, 185, 42);
 		panel.add(txtPrice);
 
 		txtDiscount = new JTextField();
 		txtDiscount.setForeground(new Color(0, 0, 0));
 		txtDiscount.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtDiscount.setColumns(10);
-		txtDiscount.setBounds(198, 381, 158, 42);
+		txtDiscount.setBounds(256, 389, 185, 42);
 		panel.add(txtDiscount);
 		
 		textField = new JTextField();
 		textField.setFont(new Font("Myanmar Text", Font.PLAIN, 12));
-		textField.setBounds(322, 36, 330, 35);
+		textField.setBounds(579, 34, 362, 38);
 		contentPane.add(textField);
 		textField.setColumns(10);
 
@@ -384,7 +403,7 @@ public class StocksPanel extends JPanel {
 	public void setText(int selectedIndex) {
 		// TODO Auto-generated method stub
 		if(selectedIndex == 0) {
-			btnCancel.setText("Cancel");
+			btnCancel.setText("Clear");
 			btnDeleteData.setText("Delete");
 			btnOk.setText("OK");
 			btnAddStock.setText("Add New Product");
@@ -396,10 +415,11 @@ public class StocksPanel extends JPanel {
 			lblUnitPrice.setText("Unit Price");
 			lblCategory.setText("Category");
 			lblUnit.setText("Unit");
-			lblDiscount.setText("Discount");
+			lblDiscount.setText("Discount (%)");
 			lblEditStockDetails.setText("Edit Stock Details");
+			lblEditStockDetails.setFont(new Font("Tahoma", Font.BOLD, 30));
 		}else if(selectedIndex == 1) {
-			btnCancel.setText("ထွက်");
+			btnCancel.setText("ရှင်းလင်းမည်");
 			btnDeleteData.setText("ဖျက်မည်");
 			btnOk.setText("အိုကေ");
 			btnAddStock.setText("ပစ္စည်းအသစ်ထည့်မည်");
@@ -411,9 +431,9 @@ public class StocksPanel extends JPanel {
 			lblUnitPrice.setText("တခုချင်းစျေးနှုန်း");
 			lblCategory.setText("ပစ္စည်းအမျိုးအစား");
 			lblUnit.setText("ပမာဏ");
-			lblDiscount.setText("လျှော့စျေး");
+			lblDiscount.setText("လျှော့စျေး(%)");
 			lblEditStockDetails.setText("ပစ္စည်းအချက်အလက်များပြင်ဆင်ရန်");
-			lblEditStockDetails.setFont(new Font("Myanmar Text", Font.BOLD, 15));
+			lblEditStockDetails.setFont(new Font("Myanmar Text", Font.BOLD, 17));
 		}
 	}
 }
