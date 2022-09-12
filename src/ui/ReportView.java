@@ -14,6 +14,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import utilities.DBConnector;
 
@@ -37,11 +38,13 @@ import javax.swing.JFileChooser;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Desktop;
 
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.ImageIcon;
 
 public class ReportView extends JPanel {
 
@@ -53,10 +56,15 @@ public class ReportView extends JPanel {
 	RowTable table = new RowTable();
 	private JTextField txtInvoice;
 	JTabbedPane tabbedPane;
+	private JLabel lblHeading;
+	private JLabel lblSelectDate;
+	private JLabel lblFrom;
+	private JLabel lblTo;
 	/**
 	 * Create the panel.
 	 */
-	public ReportView() {
+	public ReportView(int language) {
+
 		setOpaque(false);
 		setSize(1050, 596);
 		setLayout(null);
@@ -65,7 +73,7 @@ public class ReportView extends JPanel {
 		scrollPane.setViewportBorder(new EmptyBorder(0, 0, 0, 0));
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setBounds(245, 83, 668, 470);
+		scrollPane.setBounds(317, 83, 668, 470);
 		add(scrollPane);
 		table.setSelectionForeground(new Color(204, 204, 204));
 		table.setShowGrid(false);
@@ -96,7 +104,7 @@ public class ReportView extends JPanel {
 		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-		tabbedPane.setBounds(10, 82, 230, 225);
+		tabbedPane.setBounds(37, 116, 230, 225);
 		add(tabbedPane);
 		JPanel panel = new JPanel();
 		panel.setOpaque(false);
@@ -106,20 +114,20 @@ public class ReportView extends JPanel {
 		panel.setLayout(null);
 		try {
 			SimpleDateFormat df =new SimpleDateFormat("yyyy-MM-dd");
-			JLabel lblNewLabel = new JLabel("From");
-			lblNewLabel.setBounds(15, 42, 98, 25);
-			panel.add(lblNewLabel);
-			lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblFrom = new JLabel("From");
+			lblFrom.setBounds(15, 42, 98, 25);
+			panel.add(lblFrom);
+			lblFrom.setFont(new Font("Myanmar Text", Font.PLAIN, 16));
 			chooserFirstDate = new JDateChooser();
 			chooserFirstDate.setBounds(15, 65, 200, 35);
 			panel.add(chooserFirstDate);
 			chooserFirstDate.getCalendarButton().setLocation(94, 23);
 			chooserFirstDate.setDate(df.parse(table.getValueAt(0, 4).toString()));
 			
-			JLabel lblTo = new JLabel("To");
+			lblTo = new JLabel("To");
 			lblTo.setBounds(15, 111, 98, 25);
 			panel.add(lblTo);
-			lblTo.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblTo.setFont(new Font("Myanmar Text", Font.PLAIN, 16));
 			chooserLastDate = new JDateChooser();
 			chooserLastDate.setBounds(15, 137, 200, 35);
 			panel.add(chooserLastDate);
@@ -134,10 +142,10 @@ public class ReportView extends JPanel {
 		
 		
 		
-		JLabel lblSelectFirstDate = new JLabel("Select Date");
-		lblSelectFirstDate.setBounds(74, 11, 98, 25);
-		panel.add(lblSelectFirstDate);
-		lblSelectFirstDate.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblSelectDate = new JLabel("Select Date");
+		lblSelectDate.setBounds(74, 11, 98, 25);
+		panel.add(lblSelectDate);
+		lblSelectDate.setFont(new Font("Myanmar Text", Font.PLAIN, 16));
 		
 		chooserLastDate.getDateEditor().addPropertyChangeListener("date",new PropertyChangeListener() {
 			@Override
@@ -222,27 +230,65 @@ public class ReportView extends JPanel {
 		panel_1.add(btnFilter);
 		
 		JButton btnNewButton = new JButton("Export Spreadsheet");
-		btnNewButton.setBounds(10, 318, 225, 35);
+		btnNewButton.setBounds(37, 352, 230, 35);
 		add(btnNewButton);
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnNewButton.setForeground(Color.WHITE);
 		btnNewButton.setBackground(Color.DARK_GRAY);
 		btnNewButton.setBorder(null);
+		
+		lblHeading = new JLabel("Generate Reports and Export");
+		lblHeading.setFont(new Font("Myanmar Text", Font.BOLD, 24));
+		lblHeading.setBounds(37, 31, 534, 41);
+		add(lblHeading);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				createWorkbook();
+				if(tabbedPane.getSelectedIndex() == 0)
+					createWorkbook("");
+				else createWorkbook("invoice");
 			}
 		});
-		
+		setText(language);
 		
 		
 
+	}
+	
+	
+	public void setText(int language) {
+		if(language == 0) {
+			lblTo.setText("To");
+			lblFrom.setText("From");
+			lblHeading.setText("Generate Reports and Export");
+			lblSelectDate.setText("Select Date");
+		}
+		else if(language == 1) {
+			lblTo.setText("ထိ");
+			lblFrom.setText("မှ");
+			lblHeading.setText("အရောင်းစာရင်း Excel File ထုတ်ရန်");
+			lblSelectDate.setText("ရက်စွဲရွေးရန်");
+		}
 	}
 	protected void getData(int invoice) {
 		// TODO Auto-generated method stub
 		Statement s = null;
 		ResultSet rs = null;
-		DefaultTableModel d = (DefaultTableModel)table.getModel();
+		DefaultTableModel d = new DefaultTableModel() {
+			
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+			String[] headers = {"Invoice","Product Code","Product Name","Quantity","Unit Price","Subtotal"};
+			@Override
+			public int getColumnCount() {
+				return headers.length;
+			}
+			@Override
+			public String getColumnName(int index) {
+				return headers[index];
+			}
+		};
 		d.setRowCount(0);
 		try {
 			s = DBConnector.getConnection().createStatement();
@@ -254,20 +300,37 @@ public class ReportView extends JPanel {
 		try {
 			rs = s.executeQuery(query);
 			while(rs.next()) {
-				Object[] result = {rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5)};
+				Object[] result = {rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getString(6)};
 				d.addRow(result);
 			}
-			
+			table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+			table.setModel(d);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}
+	
 	protected void getData(String firstdate, String lastdate) {
 		// TODO Auto-generated method stub
 		Statement s = null;
 		ResultSet rs = null;
-		DefaultTableModel d = (DefaultTableModel)table.getModel();
+		DefaultTableModel d = new DefaultTableModel() {
+			
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+			String[] headers = {"Invoice","Product Code","Product Name","Quantity","Date"};
+			@Override
+			public int getColumnCount() {
+				return headers.length;
+			}
+			@Override
+			public String getColumnName(int index) {
+				return headers[index];
+			}
+		};
 		d.setRowCount(0);
 		try {
 			s = DBConnector.getConnection().createStatement();
@@ -281,15 +344,15 @@ public class ReportView extends JPanel {
 			while(rs.next()) {
 				Object[] result = {rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5)};
 				d.addRow(result);
-			}
+			}table.setModel(d);
 			
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}
-	protected void createWorkbook() {
-		String ext = null;
+	protected void createWorkbook(String filter) {
+		String ext = ".xlsx";
 		
 		// TODO Auto-generated method stub
 		  try (XSSFWorkbook workbook = new XSSFWorkbook()) {
@@ -310,28 +373,49 @@ public class ReportView extends JPanel {
 			  for(int i = 0; i < table.getRowCount();i++){
 				  sheet.createRow(i+1); 
 				  for(int j = 0; j < table.getColumnCount();j++) {
+
 					  Cell c = sheet.getRow(i+1).createCell(j);
-					  c.setCellValue(table.getValueAt(i,j).toString());
+
+					  Object object = table.getValueAt(i, j);
+					  if(j == 5) {
+						  double d = Double.parseDouble(object.toString());
+						  c.setCellValue(d);
+					  }else {
+
+						  c.setCellValue(object.toString());
+					  }
 					  sheet.autoSizeColumn(j);
 				  }
 			  }
-				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.setFileSelectionMode(JFileChooser.SAVE_DIALOG);
-				File f;
-				if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-					if(tabbedPane.getSelectedIndex() == 0) {
-						SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-						String from = format.format(chooserFirstDate.getDate());
-						String to = format.format(chooserLastDate.getDate());
-						f = new File(fileChooser.getSelectedFile()+"/"+from+" to "+to+ext);
-					}else {
-						f = new File(fileChooser.getSelectedFile()+"/"+"Invoice#"+txtInvoice.getText()+ext);
-					}
-					f.createNewFile();
-					
-					workbook.write(new FileOutputStream(f));
-					Desktop.getDesktop().open(f);
+			  
+			  if(filter == "invoice") {
+				  int totalCellNum = sheet.getRow(0).getLastCellNum()-2;
+				  int lastCellNum = sheet.getRow(0).getLastCellNum()-1;
+				  sheet.createRow(sheet.getLastRowNum()+1);
+				  Cell total = sheet.getRow(sheet.getLastRowNum()).createCell(totalCellNum);
+				  total.setCellValue("Total:");
+				  Cell formulaCell = sheet.getRow(sheet.getLastRowNum()).createCell(lastCellNum);
+				  XSSFFormulaEvaluator eva = workbook.getCreationHelper().createFormulaEvaluator();
+				  formulaCell.setCellFormula("SUM(F2:F"+(sheet.getLastRowNum())+")");
+				  eva.evaluateFormulaCell(formulaCell);
+			  }
+			  
+			  JFileChooser fileChooser = new JFileChooser();
+			  fileChooser.setFileSelectionMode(JFileChooser.SAVE_DIALOG);
+			  File f;
+			  if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+				  if(tabbedPane.getSelectedIndex() == 0) {
+					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+					String from = format.format(chooserFirstDate.getDate());
+					String to = format.format(chooserLastDate.getDate());
+					f = new File(fileChooser.getSelectedFile()+"/"+from+" to "+to+ext);
+				}else {
+					f = new File(fileChooser.getSelectedFile()+"/"+"Invoice#"+txtInvoice.getText()+ext);
 				}
+				f.createNewFile();
+				workbook.write(new FileOutputStream(f));
+				Desktop.getDesktop().open(f);
+			 }
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -75,7 +75,7 @@ public class StocksPanel extends JPanel {
 		setText(i);
 		add(contentPane);
 		
-		JButton btnReset = new JButton("Reset");
+		JButton btnReset = new JButton("Refresh");
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				txtSearch.setText("");

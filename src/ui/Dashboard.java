@@ -113,6 +113,9 @@ public class Dashboard extends JFrame  {
 					((AddSalePanel)viewPanel.getComponent(0)).setText(lan);
 					((AddSalePanel)viewPanel.getComponent(0)).updatelanguage(lan);
 				}
+				if(viewPanel.getComponent(0).getClass() == ReportView.class) {
+					((ReportView)viewPanel.getComponent(0)).setText(lan);
+				}
 			}
 		});
 		comboBox.setFont(new Font("Myanmar Text", Font.PLAIN, 14));
@@ -157,6 +160,12 @@ public class Dashboard extends JFrame  {
 		lblNewLabel.setBounds(0, 127, 280, 280);
 		panel.add(lblNewLabel);
 		
+		JLabel lbl_aks = new JLabel("AKS Retail POS System");
+		lbl_aks.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_aks.setFont(new Font("Tahoma", Font.BOLD, 25));
+		lbl_aks.setBounds(293, 9, 310, 54);
+		mainPanel.add(lbl_aks);
+		
 		
 
 	}
@@ -166,7 +175,7 @@ public class Dashboard extends JFrame  {
 		lblTitle.setText("View Sales");
 		viewPanel.setVisible(false);
 		viewPanel.removeAll();
-		viewPanel.add(new ReportView());
+		viewPanel.add(new ReportView(comboBox.getSelectedIndex()));
 		viewPanel.setVisible(true);
 }
 
